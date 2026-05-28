@@ -5,34 +5,282 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>心小跳塔羅經營儀表板</title>
   <style>
-    :root{--pink:#ec4899;--rose:#fb7185;--ink:#3f2a35;--muted:#8b6b78;--line:rgba(236,72,153,.18);--card:rgba(255,255,255,.8)}
-    *{box-sizing:border-box} body{margin:0;font-family:'Noto Sans TC','Microsoft JhengHei',system-ui,sans-serif;color:var(--ink);background:radial-gradient(circle at 8% 8%,#fff 0 7%,transparent 22%),radial-gradient(circle at 90% 5%,#ffe4f2 0 16%,transparent 34%),linear-gradient(135deg,#fff7fb,#ffe4f2 48%,#fce7f3);min-height:100vh}.wrap{max-width:1180px;margin:auto;padding:24px}header,.card{background:var(--card);border:1px solid #fff;border-radius:30px;padding:24px;box-shadow:0 12px 30px rgba(236,72,153,.08);backdrop-filter:blur(10px)}header{display:flex;justify-content:space-between;gap:20px;align-items:flex-end}h1{font-size:clamp(30px,5vw,56px);margin:8px 0;line-height:1}h2{margin:0 0 16px}.tag{letter-spacing:.22em;color:var(--pink);font-weight:800;font-size:13px}.sub{color:var(--muted);line-height:1.7}.pill{background:#ffe4f2;border-radius:22px;padding:14px 18px}.grid{display:grid;gap:16px}.stats{grid-template-columns:repeat(5,1fr);margin:18px 0}.stat b{font-size:34px;display:block}.main{grid-template-columns:2fr 1fr}input,select,textarea{width:100%;border:1px solid var(--line);background:rgba(255,255,255,.82);border-radius:16px;padding:12px;outline:none;color:var(--ink);font-family:inherit}textarea{min-height:90px;resize:vertical}.formgrid{grid-template-columns:repeat(3,1fr)}.wide{grid-column:span 2}.full{grid-column:1/-1}button{border:0;background:var(--pink);color:white;border-radius:16px;padding:12px 18px;font-weight:800;cursor:pointer;box-shadow:0 8px 18px rgba(236,72,153,.2)}button.danger{background:transparent;color:#be185d;padding:4px;box-shadow:none}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:980px;font-size:14px}th,td{padding:12px 8px;border-bottom:1px solid #fde2ef;text-align:left;vertical-align:top}th{color:#be185d;white-space:nowrap}td input{padding:6px;border-radius:10px;background:transparent}.series{grid-template-columns:repeat(3,1fr)}.item{background:linear-gradient(135deg,#fff,#ffe4f2);border-radius:24px;padding:18px;border:1px solid #fff}.item p{margin:6px 0;color:var(--muted);font-size:14px}.weekplan{grid-template-columns:repeat(2,1fr)}.day{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff5fa;border-radius:20px;padding:14px;border:1px solid #fff}.bubble{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#f472b6;color:white;font-weight:900}.idea{display:flex;justify-content:space-between;gap:8px;background:#fff5fa;border-radius:18px;padding:12px;margin:8px 0}details{background:#fffafd;border-radius:24px;padding:16px;border:1px solid #fff;margin:14px 0}summary{font-weight:900;color:#be185d;cursor:pointer}pre{white-space:pre-wrap;line-height:1.8;font-family:inherit;color:#5f4050}.dark{background:#2a1621;color:white}.dark p{color:#fce7f3}@media(max-width:900px){header,.main{display:grid;grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.formgrid,.series,.weekplan{grid-template-columns:1fr}.wide{grid-column:1/-1}}
+    :root{
+      --pink:#ec4899;
+      --rose:#fb7185;
+      --soft:#fff1f7;
+      --ink:#3f2a35;
+      --muted:#8b6b78;
+      --card:rgba(255,255,255,.82);
+      --line:rgba(236,72,153,.18);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 10% 10%, #fff 0 8%, transparent 25%),
+        radial-gradient(circle at 85% 5%, #ffe4f2 0 14%, transparent 30%),
+        linear-gradient(135deg,#fff5fa,#ffe4f2 48%,#fce7f3);
+      min-height:100vh;
+    }
+    .wrap{max-width:1180px;margin:auto;padding:24px}
+    header{
+      background:var(--card);
+      border:1px solid #fff;
+      border-radius:32px;
+      padding:28px;
+      box-shadow:0 12px 30px rgba(236,72,153,.08);
+      backdrop-filter:blur(10px);
+      display:flex;justify-content:space-between;gap:20px;align-items:flex-end;
+    }
+    h1{margin:8px 0 6px;font-size:clamp(30px,5vw,56px);line-height:1}
+    h2{margin:0 0 16px;font-size:22px}
+    .tag{letter-spacing:.22em;color:var(--pink);font-weight:800;font-size:13px}
+    .sub{color:var(--muted);margin:0;line-height:1.7}
+    .pill{background:#ffe4f2;border-radius:22px;padding:14px 18px;min-width:210px}
+    .grid{display:grid;gap:16px}
+    .stats{grid-template-columns:repeat(5,1fr);margin:18px 0}
+    .card{
+      background:var(--card);
+      border:1px solid #fff;
+      border-radius:28px;
+      padding:20px;
+      box-shadow:0 8px 26px rgba(236,72,153,.07);
+    }
+    .stat b{font-size:34px;display:block;margin-top:6px}
+    .stat span{color:var(--muted);font-size:14px}
+    .main{grid-template-columns:2fr 1fr}
+    input,select,textarea{
+      width:100%;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.78);
+      border-radius:16px;
+      padding:12px;
+      outline:none;
+      color:var(--ink);
+      font-family:inherit;
+    }
+    textarea{min-height:90px;resize:vertical}
+    .formgrid{grid-template-columns:repeat(3,1fr)}
+    .wide{grid-column:span 2}
+    .full{grid-column:1/-1}
+    button{
+      border:0;
+      background:var(--pink);
+      color:white;
+      border-radius:16px;
+      padding:12px 18px;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow:0 8px 18px rgba(236,72,153,.2);
+    }
+    button:hover{filter:brightness(.96)}
+    button.danger{background:transparent;color:#be185d;padding:4px;box-shadow:none}
+    .tablewrap{overflow:auto}
+    table{width:100%;border-collapse:collapse;min-width:980px;font-size:14px}
+    th,td{padding:12px 8px;border-bottom:1px solid #fde2ef;text-align:left;vertical-align:top}
+    th{color:#be185d;white-space:nowrap}
+    td input{padding:6px;border-radius:10px;background:transparent}
+    .series{grid-template-columns:repeat(3,1fr)}
+    .series .item{background:linear-gradient(135deg,#fff,#ffe4f2);border-radius:24px;padding:18px;border:1px solid #fff}
+    .series p{margin:6px 0;color:var(--muted);font-size:14px}
+    .weekplan{grid-template-columns:repeat(2,1fr)}
+    .day{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      background:#fff5fa;border-radius:20px;padding:14px;border:1px solid #fff;
+    }
+    .bubble{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#f472b6;color:white;font-weight:900}
+    .idea{display:flex;justify-content:space-between;gap:8px;background:#fff5fa;border-radius:18px;padding:12px;margin:8px 0}
+    details{background:#fffafd;border-radius:24px;padding:16px;border:1px solid #fff;margin:14px 0}
+    summary{font-weight:900;color:#be185d;cursor:pointer}
+    pre{white-space:pre-wrap;line-height:1.8;font-family:inherit;color:#5f4050}
+    .month table{min-width:880px;background:#fff;border-radius:20px;overflow:hidden}
+    .dark{background:#2a1621;color:white}
+    .dark p{color:#fce7f3}
+    @media(max-width:900px){
+      header,.main{grid-template-columns:1fr;display:grid}
+      .stats{grid-template-columns:repeat(2,1fr)}
+      .formgrid,.series,.weekplan{grid-template-columns:1fr}
+      .wide{grid-column:1/-1}
+    }
   </style>
 </head>
 <body>
-<div class="wrap">
-<header><div><div class="tag">DOKIDOKIBOOMBOOM.TAROT</div><h1>心小跳塔羅經營儀表板</h1><p class="sub">記錄發文、追蹤成效、管理靈感。讓你的深夜靈魂宇宙有系統地長大。🌙</p></div><div class="pill"><b>本月主軸</b><br>戀愛 × 情緒 × 靈魂感 × 人森幹話觀察</div></header>
-<section class="grid stats"><div class="card stat"><span>愛心</span><b id="sumLikes">0</b></div><div class="card stat"><span>留言</span><b id="sumComments">0</b></div><div class="card stat"><span>收藏</span><b id="sumSaves">0</b></div><div class="card stat"><span>分享</span><b id="sumShares">0</b></div><div class="card stat"><span>私訊</span><b id="sumDms">0</b></div></section>
-<section class="grid main"><div class="card"><h2>新增發文紀錄</h2><div class="grid formgrid"><input id="date" type="date"><select id="platform"><option>IG</option><option>Threads</option><option>限動</option><option>Reels</option></select><select id="type"><option>大眾占卜</option><option>情緒短句</option><option>人森觀察室</option><option>戀愛翻譯</option><option>生活感</option><option>商業導流</option></select><input id="title" class="wide" placeholder="發文主題"><select id="status"><option>草稿</option><option>排程中</option><option>已發布</option><option>待解析</option></select><textarea id="content" class="full" placeholder="文案 / 備註 / 解析方向"></textarea><input id="note" class="full" placeholder="備註：例如短時間多人按愛心、適合延伸占卜題"></div><br><button onclick="addPost()">加入紀錄</button></div><div class="card"><h2>目前最佳內容</h2><p class="sub">依愛心＋留言＋收藏＋分享粗估</p><div class="pill" style="margin-top:16px;background:linear-gradient(135deg,#ffe4f2,#fff1f7);"><b id="bestTitle">尚無資料</b><p id="bestNote" class="sub">多發幾篇，宇宙會給數據。</p></div></div></section>
-<section class="card" style="margin-top:18px"><h2>發文成效追蹤表</h2><div class="tablewrap"><table><thead><tr><th>日期</th><th>平台</th><th>類型</th><th>主題</th><th>狀態</th><th>愛心</th><th>留言</th><th>收藏</th><th>分享</th><th>私訊</th><th>備註</th><th></th></tr></thead><tbody id="postTable"></tbody></table></div></section>
-<section class="grid main" style="margin-top:18px"><div class="card"><h2>每週內容排程</h2><div class="grid weekplan" id="weekPlan"></div></div><div class="card"><h2>大眾占卜靈感庫</h2><div style="display:flex;gap:8px"><input id="ideaInput" placeholder="新增題目，例如：你會讓哪種人失控？"><button onclick="addIdea()">新增</button></div><div id="ideas"></div></div></section>
-<section class="card" style="margin-top:18px"><h2>內容系列系統</h2><div class="grid series" id="series"></div></section>
-<section class="card" style="margin-top:18px"><h2>完整四週排程範本</h2><div id="monthPlan"></div></section>
-<section class="card" style="margin-top:18px"><h2>可直接套用模板</h2><div id="templates"></div></section>
-<section class="card dark" style="margin-top:18px"><h2>本週檢討問題</h2><p>1. 哪一篇最多人留言？為什麼？</p><p>2. 哪一篇最容易被收藏？</p><p>3. 哪個時段互動最好？</p><p>4. 哪一種題目最適合延伸成占卜服務？</p><p>5. 哪一篇最有「心小跳味」？</p><p>6. 下週要複製哪一種成功元素？</p></section>
-</div>
+  <div class="wrap">
+    <header>
+      <div>
+        <div class="tag">DOKIDOKIBOOMBOOM.TAROT</div>
+        <h1>心小跳塔羅經營儀表板</h1>
+        <p class="sub">記錄發文、追蹤成效、管理靈感。讓你的深夜靈魂宇宙不是靠靈感硬撐，是有系統地長大。🌙</p>
+      </div>
+      <div class="pill">
+        <b>本月主軸</b><br>
+        戀愛 × 情緒 × 靈魂感 × 人森幹話觀察
+      </div>
+    </header>
+
+    <section class="grid stats">
+      <div class="card stat"><span>愛心</span><b id="sumLikes">0</b></div>
+      <div class="card stat"><span>留言</span><b id="sumComments">0</b></div>
+      <div class="card stat"><span>收藏</span><b id="sumSaves">0</b></div>
+      <div class="card stat"><span>分享</span><b id="sumShares">0</b></div>
+      <div class="card stat"><span>私訊</span><b id="sumDms">0</b></div>
+    </section>
+
+    <section class="grid main">
+      <div class="card">
+        <h2>新增發文紀錄</h2>
+        <div class="grid formgrid">
+          <input id="date" type="date">
+          <select id="platform"><option>IG</option><option>Threads</option><option>限動</option><option>Reels</option></select>
+          <select id="type"><option>大眾占卜</option><option>情緒短句</option><option>人森觀察室</option><option>戀愛翻譯</option><option>生活感</option><option>商業導流</option></select>
+          <input id="title" class="wide" placeholder="發文主題">
+          <select id="status"><option>草稿</option><option>排程中</option><option>已發布</option><option>待解析</option></select>
+          <textarea id="content" class="full" placeholder="文案 / 備註 / 解析方向"></textarea>
+          <input id="note" class="full" placeholder="備註：例如短時間多人按愛心、適合延伸占卜題">
+        </div>
+        <br>
+        <button onclick="addPost()">加入紀錄</button>
+      </div>
+      <div class="card">
+        <h2>目前最佳內容</h2>
+        <p class="sub">依愛心＋留言＋收藏＋分享粗估</p>
+        <div class="pill" style="margin-top:16px;background:linear-gradient(135deg,#ffe4f2,#fff1f7);">
+          <b id="bestTitle">尚無資料</b>
+          <p id="bestNote" class="sub">多發幾篇，宇宙會給數據。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:18px">
+      <h2>發文成效追蹤表</h2>
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr><th>日期</th><th>平台</th><th>類型</th><th>主題</th><th>狀態</th><th>愛心</th><th>留言</th><th>收藏</th><th>分享</th><th>私訊</th><th>備註</th><th></th></tr>
+          </thead>
+          <tbody id="postTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="grid main" style="margin-top:18px">
+      <div class="card">
+        <h2>每週內容排程</h2>
+        <div class="grid weekplan" id="weekPlan"></div>
+      </div>
+      <div class="card">
+        <h2>大眾占卜靈感庫</h2>
+        <div style="display:flex;gap:8px">
+          <input id="ideaInput" placeholder="新增題目，例如：你會讓哪種人失控？">
+          <button onclick="addIdea()">新增</button>
+        </div>
+        <div id="ideas"></div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:18px">
+      <h2>內容系列系統</h2>
+      <div class="grid series" id="series"></div>
+    </section>
+
+    <section class="card month" style="margin-top:18px">
+      <h2>完整四週排程範本</h2>
+      <div id="monthPlan"></div>
+    </section>
+
+    <section class="card" style="margin-top:18px">
+      <h2>可直接套用模板</h2>
+      <div id="templates"></div>
+    </section>
+
+    <section class="card dark" style="margin-top:18px">
+      <h2>本週檢討問題</h2>
+      <p>1. 哪一篇最多人留言？為什麼？</p>
+      <p>2. 哪一篇最容易被收藏？</p>
+      <p>3. 哪個時段互動最好？</p>
+      <p>4. 哪一種題目最適合延伸成占卜服務？</p>
+      <p>5. 哪一篇最有「心小跳味」？</p>
+      <p>6. 下週要複製哪一種成功元素？</p>
+    </section>
+  </div>
+
 <script>
-const defaultPosts=[{id:1,date:'2026-05-20',platform:'Threads',type:'時事梗短文',title:'今天開獎日',content:'希望大家：發票中獎、桃花中獎、快樂中獎。✨',likes:0,comments:0,saves:0,shares:0,dms:0,status:'已發布',note:'短時間多人按愛心，適合延伸成占卜題。'},{id:2,date:'2026-05-21',platform:'IG',type:'大眾占卜',title:'你接下來最容易中什麼獎？',content:'A/B/C/D 選一個最吸引你的女孩。解析明天公布。',likes:0,comments:0,saves:0,shares:0,dms:0,status:'排程中',note:'延續發票開獎梗，活潑輕鬆。'}];
-const defaultIdeas=['你會讓人產生哪種戒斷反應？','他偷偷把你當成什麼？','你接下來最容易中什麼獎？','別人最容易對你產生哪種誤會？','你戀愛時最像哪種危險角色？','宇宙現在偷偷替你安排什麼？','他第一次對你暈船的瞬間','哪種人最容易被你搞瘋？','你的戀愛副作用是什麼？','你下一段桃花會以什麼方式靠近？'];
-const seriesData=[['大眾占卜','吸新粉、拉留言、導私訊','IG 4:5 圖文 / Reels / 限動導流','每週 2 篇','你接下來最容易中什麼獎？｜他偷偷把你當成什麼？'],['心小跳人森觀察室','建立 IP、讓人轉發','Threads 短文 / IG 第二張圖','每週 2-3 則','成年人最大的默契，是明明很在意還要裝沒事。'],['奶茶式戀愛翻譯','高共鳴、高留言','Threads / 限動問答 / Reels 字卡','每週 1-2 則','水瓶男不是不回，是在等自己突然想回。'],['深夜情緒碎片','養死忠粉、建立陪伴感','Threads / IG 限動 / Reels','每日可發','不是睡不著，是情緒還沒下班。'],['靈魂系生活感','讓粉絲喜歡你這個人','限動 / Threads / 生活圖文','每週 3-5 則','晚餐、香水、房間、深夜散步、崩潰小日常'],['占卜接單導流','自然轉換、私訊預約','限動 / 貼文結尾 / Threads 順口提到','每週 2-3 次輕放','最近戀愛腦客人很多，宇宙真的不太平靜🙂']];
-const weekPlan=[['一','情緒短句','Threads','養死忠粉'],['二','大眾占卜','IG','拉互動'],['三','心小跳人森觀察室','Threads','建立IP'],['四','奶茶式戀愛翻譯','IG / Threads','轉發率'],['五','生活感內容','限動','人格魅力'],['六','高流量占卜','IG / Reels','吸新粉'],['日','深夜療癒文','Threads','陪伴感']];
-const monthPlan=[['第1週｜建立互動',[['一','Threads','深夜情緒碎片','有些人不是突然不愛了，是撐太久了。','養共鳴'],['二','IG','大眾占卜','你接下來最容易中什麼獎？','拉留言'],['三','Threads','人森觀察室','成年人最大的默契，是明明很在意還要裝沒事。','建立IP'],['四','IG/Threads','戀愛翻譯','水瓶男不是不回，是在等自己突然想回。','轉發'],['五','限動','生活感','晚餐＋今日情緒投票','拉近距離'],['六','IG','大眾占卜','他偷偷把你當成什麼？','吸新粉'],['日','Threads','深夜療癒','這裡不一定能解決人生，但至少有人懂你為什麼失眠。','養粉']]],['第2週｜放大戀愛感',[['一','Threads','情緒短句','有些晚安，其實是在等你挽留。','收藏'],['二','IG','大眾占卜','你會讓人產生哪種戒斷反應？','高互動'],['三','Threads','人森觀察室','現在的人談戀愛，很像兩個人在比誰比較能忍。','留言'],['四','Reels','戀愛短句','有些人不是不主動，只是怕主動後更喜歡你。','觸及'],['五','限動','互動問答','會偷看喜歡的人限動嗎？','互動'],['六','IG','大眾占卜','別人最容易對你產生哪種幻想？','分享'],['日','Threads','占卜導流','最近戀愛腦客人很多，宇宙真的不太平靜🙂','私訊']]],['第3週｜建立個人味道',[['一','Threads','深夜碎片','不是不在乎，是在乎到不知道怎麼講。','共鳴'],['二','IG','大眾占卜','哪種人最容易被你搞瘋？','留言'],['三','限動','生活感','香水／飲料／房間角落＋一句心情','人格'],['四','Threads','戀愛翻譯','他不是冷淡，他是把情緒收進冰箱。','轉發'],['五','IG','人森觀察室圖卡','成年人最穩定的關係，是跟外送員。','IP'],['六','Reels','占卜翻牌','你的戀愛副作用是什麼？','觸及'],['日','Threads','療癒文','有些關係不用刪掉，只要不再餵養。','收藏']]],['第4週｜自然轉單',[['一','Threads','情緒短句','你不是太敏感，是你真的有感覺到。','信任'],['二','IG','大眾占卜','你下一段桃花會以什麼方式靠近？','吸粉'],['三','限動','客單導流','最近好多感情題，看來大家心裡都很吵。','私訊'],['四','Threads','人森觀察室','有些人不是成熟，只是懶得再解釋。','互動'],['五','IG','生活＋占卜軟廣','今晚適合吃好一點，也適合把感情看清楚一點。','轉換'],['六','IG/Reels','高流量占卜','如果你突然消失，他會怎樣？','流量'],['日','Threads','月末總結','這個月最該謝謝自己：還願意相信好事會來。','陪伴']]]];
-const templates=[['IG大眾占卜貼文模板','【題目】\n\n一句情緒開場。\n\n這次的大眾占卜，測測＿＿＿＿。\n\nA｜＿＿\nB｜＿＿\nC｜＿＿\nD｜＿＿\n\n不要想太久，第一眼最有感覺的通常最準。\n\n💌 留言你的選項\n解析將於明天公布在留言區 ✨\n\n📩 想看更深入的個人解析，歡迎私訊占卜。'],['解析留言模板','解析如下 ✨\n一句主題引言。\n\n━━━━━━━━━━━━\nA｜選項名稱\n解析內容。\n\n👉 簡單講：一句結論。\n\n━━━━━━━━━━━━\nB｜選項名稱\n解析內容。\n\n👉 簡單講：一句結論。\n\n━━━━━━━━━━━━\n💌 留言你的選項＋狀態\n也許我會偷偷抽人加碼解析。'],['Threads短文模板','第一句：生活或時事鉤子。\n\n第二句：戀愛／情緒轉折。\n\n第三句：一句讓人想按愛心的收尾。\n\n例：今天開獎日。\n希望大家發票中獎、桃花中獎、快樂中獎。✨'],['限動四段式模板','1｜情緒：今天有人也想消失一下嗎🙂\n2｜生活：晚餐／飲料／房間角落\n3｜互動：會偷看喜歡的人限動嗎？\n4｜導流：今天的大眾占卜已更新，去選。']];
-let posts=JSON.parse(localStorage.getItem('heartjump_posts')||'null')||defaultPosts;let ideas=JSON.parse(localStorage.getItem('heartjump_ideas')||'null')||defaultIdeas;
-function save(){localStorage.setItem('heartjump_posts',JSON.stringify(posts));localStorage.setItem('heartjump_ideas',JSON.stringify(ideas))}function sum(k){return posts.reduce((a,p)=>a+Number(p[k]||0),0)}function val(id){return document.getElementById(id).value}function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
-function render(){['Likes','Comments','Saves','Shares','Dms'].forEach(x=>document.getElementById('sum'+x).innerText=sum(x.toLowerCase()));const best=[...posts].sort((a,b)=>(+b.likes+ +b.comments+ +b.saves+ +b.shares)-(+a.likes+ +a.comments+ +a.saves+ +a.shares))[0];document.getElementById('bestTitle').innerText=best?.title||'尚無資料';document.getElementById('bestNote').innerText=best?.note||'多發幾篇，宇宙會給數據。';document.getElementById('postTable').innerHTML=posts.map(p=>`<tr>${['date','platform','type','title','status','likes','comments','saves','shares','dms','note'].map(k=>`<td><input value="${esc(p[k]??'')}" ${['likes','comments','saves','shares','dms'].includes(k)?"type='number'":''} onchange="updatePost(${p.id},'${k}',this.value)"></td>`).join('')}<td><button class="danger" onclick="deletePost(${p.id})">刪除</button></td></tr>`).join('');document.getElementById('ideas').innerHTML=ideas.map((x,i)=>`<div class="idea"><span>${esc(x)}</span><button class="danger" onclick="deleteIdea(${i})">刪除</button></div>`).join('')}
-function addPost(){const p={id:Date.now(),date:val('date'),platform:val('platform'),type:val('type'),title:val('title'),content:val('content'),likes:0,comments:0,saves:0,shares:0,dms:0,status:val('status'),note:val('note')};if(!p.title.trim())return alert('先填主題啦，宇宙需要標題。');posts.unshift(p);save();render();['title','content','note'].forEach(id=>document.getElementById(id).value='')}function updatePost(id,k,v){posts=posts.map(p=>p.id===id?{...p,[k]:v}:p);save();render()}function deletePost(id){posts=posts.filter(p=>p.id!==id);save();render()}function addIdea(){const x=val('ideaInput');if(!x.trim())return;ideas.unshift(x);document.getElementById('ideaInput').value='';save();render()}function deleteIdea(i){ideas.splice(i,1);save();render()}
-function init(){document.getElementById('weekPlan').innerHTML=weekPlan.map(w=>`<div class="day"><div style="display:flex;gap:12px;align-items:center"><div class="bubble">${w[0]}</div><div><b>${w[1]}</b><br><span class="sub">${w[2]}｜${w[3]}</span></div></div><input type="checkbox"></div>`).join('');document.getElementById('series').innerHTML=seriesData.map(s=>`<div class="item"><b>${s[0]}</b><p>目的：${s[1]}</p><p>格式：${s[2]}</p><p>頻率：${s[3]}</p><p>範例：${s[4]}</p></div>`).join('');document.getElementById('monthPlan').innerHTML=monthPlan.map(w=>`<details open><summary>${w[0]}</summary><div class="tablewrap"><table><thead><tr><th>星期</th><th>平台</th><th>系列</th><th>可直接使用主題 / 文案</th><th>目的</th></tr></thead><tbody>${w[1].map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>`).join('');document.getElementById('templates').innerHTML=templates.map(t=>`<details><summary>${t[0]}</summary><pre>${t[1]}</pre></details>`).join('');render()}init();
+const defaultPosts = [
+  {id:1,date:"2026-05-20",platform:"Threads",type:"時事梗短文",title:"今天開獎日",content:"希望大家：發票中獎、桃花中獎、快樂中獎。✨",likes:0,comments:0,saves:0,shares:0,dms:0,status:"已發布",note:"短時間多人按愛心，適合延伸成占卜題。"},
+  {id:2,date:"2026-05-21",platform:"IG",type:"大眾占卜",title:"你接下來最容易中什麼獎？",content:"A/B/C/D 選一個最吸引你的女孩。解析明天公布。",likes:0,comments:0,saves:0,shares:0,dms:0,status:"排程中",note:"延續發票開獎梗，活潑輕鬆。"}
+];
+const defaultIdeas = ["你會讓人產生哪種戒斷反應？","他偷偷把你當成什麼？","你接下來最容易中什麼獎？","別人最容易對你產生哪種誤會？","你戀愛時最像哪種危險角色？","宇宙現在偷偷替你安排什麼？","他第一次對你暈船的瞬間","哪種人最容易被你搞瘋？","你的戀愛副作用是什麼？","你下一段桃花會以什麼方式靠近？"];
+const seriesData = [
+  ["大眾占卜","吸新粉、拉留言、導私訊","IG 4:5 圖文 / Reels / 限動導流","每週 2 篇","你接下來最容易中什麼獎？｜他偷偷把你當成什麼？"],
+  ["心小跳人森觀察室","建立 IP、讓人轉發","Threads 短文 / IG 第二張圖","每週 2-3 則","成年人最大的默契，是明明很在意還要裝沒事。"],
+  ["奶茶式戀愛翻譯","高共鳴、高留言","Threads / 限動問答 / Reels 字卡","每週 1-2 則","水瓶男不是不回，是在等自己突然想回。"],
+  ["深夜情緒碎片","養死忠粉、建立陪伴感","Threads / IG 限動 / Reels","每日可發","不是睡不著，是情緒還沒下班。"],
+  ["靈魂系生活感","讓粉絲喜歡你這個人","限動 / Threads / 生活圖文","每週 3-5 則","晚餐、香水、房間、深夜散步、崩潰小日常"],
+  ["占卜接單導流","自然轉換、私訊預約","限動 / 貼文結尾 / Threads 順口提到","每週 2-3 次輕放","最近戀愛腦客人很多，宇宙真的不太平靜🙂"]
+];
+const weekPlan = [
+  ["一","情緒短句","Threads","養死忠粉"],["二","大眾占卜","IG","拉互動"],["三","心小跳人森觀察室","Threads","建立IP"],["四","奶茶式戀愛翻譯","IG / Threads","轉發率"],["五","生活感內容","限動","人格魅力"],["六","高流量占卜","IG / Reels","吸新粉"],["日","深夜療癒文","Threads","陪伴感"]
+];
+const monthPlan = [
+  ["第1週｜建立互動",[["一","Threads","深夜情緒碎片","有些人不是突然不愛了，是撐太久了。","養共鳴"],["二","IG","大眾占卜","你接下來最容易中什麼獎？","拉留言"],["三","Threads","人森觀察室","成年人最大的默契，是明明很在意還要裝沒事。","建立IP"],["四","IG/Threads","戀愛翻譯","水瓶男不是不回，是在等自己突然想回。","轉發"],["五","限動","生活感","晚餐＋今日情緒投票","拉近距離"],["六","IG","大眾占卜","他偷偷把你當成什麼？","吸新粉"],["日","Threads","深夜療癒","這裡不一定能解決人生，但至少有人懂你為什麼失眠。","養粉"]]],
+  ["第2週｜放大戀愛感",[["一","Threads","情緒短句","有些晚安，其實是在等你挽留。","收藏"],["二","IG","大眾占卜","你會讓人產生哪種戒斷反應？","高互動"],["三","Threads","人森觀察室","現在的人談戀愛，很像兩個人在比誰比較能忍。","留言"],["四","Reels","戀愛短句","有些人不是不主動，只是怕主動後更喜歡你。","觸及"],["五","限動","互動問答","會偷看喜歡的人限動嗎？","互動"],["六","IG","大眾占卜","別人最容易對你產生哪種幻想？","分享"],["日","Threads","占卜導流","最近戀愛腦客人很多，宇宙真的不太平靜🙂","私訊"]]],
+  ["第3週｜建立個人味道",[["一","Threads","深夜碎片","不是不在乎，是在乎到不知道怎麼講。","共鳴"],["二","IG","大眾占卜","哪種人最容易被你搞瘋？","留言"],["三","限動","生活感","香水／飲料／房間角落＋一句心情","人格"],["四","Threads","戀愛翻譯","他不是冷淡，他是把情緒收進冰箱。","轉發"],["五","IG","人森觀察室圖卡","成年人最穩定的關係，是跟外送員。","IP"],["六","Reels","占卜翻牌","你的戀愛副作用是什麼？","觸及"],["日","Threads","療癒文","有些關係不用刪掉，只要不再餵養。","收藏"]]],
+  ["第4週｜自然轉單",[["一","Threads","情緒短句","你不是太敏感，是你真的有感覺到。","信任"],["二","IG","大眾占卜","你下一段桃花會以什麼方式靠近？","吸粉"],["三","限動","客單導流","最近好多感情題，看來大家心裡都很吵。","私訊"],["四","Threads","人森觀察室","有些人不是成熟，只是懶得再解釋。","互動"],["五","IG","生活＋占卜軟廣","今晚適合吃好一點，也適合把感情看清楚一點。","轉換"],["六","IG/Reels","高流量占卜","如果你突然消失，他會怎樣？","流量"],["日","Threads","月末總結","這個月最該謝謝自己：還願意相信好事會來。","陪伴"]]]
+];
+const templates = [
+  ["IG大眾占卜貼文模板","【題目】\\n\\n一句情緒開場。\\n\\n這次的大眾占卜，測測＿＿＿＿。\\n\\nA｜＿＿\\nB｜＿＿\\nC｜＿＿\\nD｜＿＿\\n\\n不要想太久，第一眼最有感覺的通常最準。\\n\\n💌 留言你的選項\\n解析將於明天公布在留言區 ✨\\n\\n📩 想看更深入的個人解析，歡迎私訊占卜。"],
+  ["解析留言模板","解析如下 ✨\\n一句主題引言。\\n\\n━━━━━━━━━━━━\\nA｜選項名稱\\n解析內容。\\n\\n👉 簡單講：一句結論。\\n\\n━━━━━━━━━━━━\\nB｜選項名稱\\n解析內容。\\n\\n👉 簡單講：一句結論。\\n\\n━━━━━━━━━━━━\\n💌 留言你的選項＋狀態\\n也許我會偷偷抽人加碼解析。"],
+  ["Threads短文模板","第一句：生活或時事鉤子。\\n\\n第二句：戀愛／情緒轉折。\\n\\n第三句：一句讓人想按愛心的收尾。\\n\\n例：今天開獎日。\\n希望大家發票中獎、桃花中獎、快樂中獎。✨"],
+  ["限動四段式模板","1｜情緒：今天有人也想消失一下嗎🙂\\n2｜生活：晚餐／飲料／房間角落\\n3｜互動：會偷看喜歡的人限動嗎？\\n4｜導流：今天的大眾占卜已更新，去選。"]
+];
+
+let posts = JSON.parse(localStorage.getItem("heartjump_posts") || "null") || defaultPosts;
+let ideas = JSON.parse(localStorage.getItem("heartjump_ideas") || "null") || defaultIdeas;
+
+function save(){
+  localStorage.setItem("heartjump_posts", JSON.stringify(posts));
+  localStorage.setItem("heartjump_ideas", JSON.stringify(ideas));
+}
+function sum(key){return posts.reduce((a,p)=>a+Number(p[key]||0),0)}
+function render(){
+  document.getElementById("sumLikes").innerText=sum("likes");
+  document.getElementById("sumComments").innerText=sum("comments");
+  document.getElementById("sumSaves").innerText=sum("saves");
+  document.getElementById("sumShares").innerText=sum("shares");
+  document.getElementById("sumDms").innerText=sum("dms");
+  const best=[...posts].sort((a,b)=>(+b.likes + +b.comments + +b.saves + +b.shares)-(+a.likes + +a.comments + +a.saves + +a.shares))[0];
+  document.getElementById("bestTitle").innerText=best?.title||"尚無資料";
+  document.getElementById("bestNote").innerText=best?.note||"多發幾篇，宇宙會給數據。";
+  document.getElementById("postTable").innerHTML=posts.map(p=>`
+    <tr>
+      ${["date","platform","type","title","status","likes","comments","saves","shares","dms","note"].map(k=>`<td><input value="${escapeHtml(p[k]??"")}" ${["likes","comments","saves","shares","dms"].includes(k)?"type='number'":""} onchange="updatePost(${p.id},'${k}',this.value)"></td>`).join("")}
+      <td><button class="danger" onclick="deletePost(${p.id})">刪除</button></td>
+    </tr>`).join("");
+  document.getElementById("ideas").innerHTML=ideas.map((x,i)=>`<div class="idea"><span>${escapeHtml(x)}</span><button class="danger" onclick="deleteIdea(${i})">刪除</button></div>`).join("");
+}
+function addPost(){
+  const p={id:Date.now(),date:val("date"),platform:val("platform"),type:val("type"),title:val("title"),content:val("content"),likes:0,comments:0,saves:0,shares:0,dms:0,status:val("status"),note:val("note")};
+  if(!p.title.trim()) return alert("先填主題啦，宇宙需要標題。");
+  posts.unshift(p); save(); render();
+  ["title","content","note"].forEach(id=>document.getElementById(id).value="");
+}
+function updatePost(id,key,value){posts=posts.map(p=>p.id===id?{...p,[key]:value}:p);save();render()}
+function deletePost(id){posts=posts.filter(p=>p.id!==id);save();render()}
+function addIdea(){const x=val("ideaInput"); if(!x.trim()) return; ideas.unshift(x); document.getElementById("ideaInput").value=""; save(); render()}
+function deleteIdea(i){ideas.splice(i,1);save();render()}
+function val(id){return document.getElementById(id).value}
+function escapeHtml(str){return String(str).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]))}
+
+function initStatic(){
+  document.getElementById("weekPlan").innerHTML=weekPlan.map(w=>`<div class="day"><div style="display:flex;gap:12px;align-items:center"><div class="bubble">${w[0]}</div><div><b>${w[1]}</b><br><span class="sub">${w[2]}｜${w[3]}</span></div></div><input type="checkbox"></div>`).join("");
+  document.getElementById("series").innerHTML=seriesData.map(s=>`<div class="item"><b>${s[0]}</b><p>目的：${s[1]}</p><p>格式：${s[2]}</p><p>頻率：${s[3]}</p><p>範例：${s[4]}</p></div>`).join("");
+  document.getElementById("monthPlan").innerHTML=monthPlan.map(w=>`<details open><summary>${w[0]}</summary><div class="tablewrap"><table><thead><tr><th>星期</th><th>平台</th><th>系列</th><th>可直接使用主題 / 文案</th><th>目的</th></tr></thead><tbody>${w[1].map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div></details>`).join("");
+  document.getElementById("templates").innerHTML=templates.map(t=>`<details><summary>${t[0]}</summary><pre>${t[1]}</pre></details>`).join("");
+}
+initStatic(); render();
 </script>
 </body>
 </html>
