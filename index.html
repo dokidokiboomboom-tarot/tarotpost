@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>心小跳塔羅內容月曆 - 年度黃金企劃版</title>
+    <title>心小跳塔羅內容月曆 - 年度黃金企劃日更挑戰版</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans+TC:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;600;800&family=Noto+Sans+TC:wght=300;400;700;900&display=swap" rel="stylesheet">
     
     <style>
         body {
@@ -103,7 +103,7 @@
             <div>
                 <div class="text-xs font-black tracking-[0.25em] text-[#ec4899] mb-2 uppercase">DokiDokiBoomBoom.Tarot</div>
                 <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-[#2a1621] tracking-tight">心小跳塔羅內容月曆</h1>
-                <p class="text-sm sm:text-base text-[#8b6b78] mt-3 leading-relaxed">⚡ 頂級超前部署！已為您備妥 2026/05 到 2027/01 完整跨年度共 108 篇黃金內容排程。今天想發哪篇，直接點擊一鍵複製！🌙</p>
+                <p class="text-sm sm:text-base text-[#8b6b78] mt-3 leading-relaxed">⚡ 頂級超前部署！已為您備妥 2026/05 到 2027/01 跨年度內容排程，<b>特別置入 6 月「30天日更挑戰」控制台與完整排程！</b> 點擊一鍵複製，輕鬆日更達標！🌙</p>
             </div>
             <div class="flex flex-wrap items-center gap-2 sm:gap-3">
                 <select id="monthFilter" class="border border-pink-100 bg-white/90 rounded-2xl px-4 py-3 font-semibold text-[#2a1621] shadow-sm cursor-pointer hover:border-[#ec4899] transition"></select>
@@ -120,6 +120,86 @@
                 <button onclick="exportData()" class="bg-purple-100 text-purple-700 px-5 py-3 rounded-2xl font-black hover:bg-purple-200 transition text-sm">匯出 JSON</button>
             </div>
         </header>
+
+        <!-- 30天日更挑戰控制台 Dashboard -->
+        <section class="glass-card rounded-[28px] p-6 shadow-md mb-8 bg-gradient-to-r from-pink-50/40 via-purple-50/20 to-pink-50/10 border-pink-200/60">
+            <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-6 pb-6 border-b border-pink-100/40">
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span class="animate-pulse flex h-3 w-3 relative">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-pink-500"></span>
+                        </span>
+                        <span class="text-xs font-black tracking-wider text-[#ec4899] uppercase">30-DAY DAILY CHALLENGE</span>
+                    </div>
+                    <h2 class="text-2xl font-black text-[#2a1621] mt-1">🔥 30天日更挑戰營運控制台 (6/1 ~ 6/30)</h2>
+                    <p class="text-sm text-[#8b6b78] mt-1">每日不停更🙌🏻gogogo！期許在 2026/06/30 完成30天挑戰，達成粉絲 100 粉、月收入 10,000 元！</p>
+                </div>
+                <!-- 營運數據即時更新輸入框 -->
+                <div class="flex flex-wrap items-center gap-4 bg-white/70 p-4 rounded-2xl border border-pink-100 shadow-sm">
+                    <div>
+                        <label class="block text-[10px] font-black text-[#8b6b78] mb-1">當前粉絲數</label>
+                        <div class="flex items-center space-x-1">
+                            <input type="number" id="challengeFollowers" oninput="updateChallengeStats()" class="w-16 text-center text-xs font-bold border border-pink-100 bg-white rounded-lg p-1.5 focus:border-[#ec4899] focus:outline-none" value="15">
+                            <span class="text-xs text-gray-400 font-semibold">/ 100 粉</span>
+                        </div>
+                    </div>
+                    <div class="h-8 w-[1px] bg-pink-100 hidden sm:block"></div>
+                    <div>
+                        <label class="block text-[10px] font-black text-[#8b6b78] mb-1">當前月收入 (TWD)</label>
+                        <div class="flex items-center space-x-1">
+                            <input type="number" id="challengeRevenue" oninput="updateChallengeStats()" class="w-20 text-center text-xs font-bold border border-pink-100 bg-white rounded-lg p-1.5 focus:border-[#ec4899] focus:outline-none" value="1200">
+                            <span class="text-xs text-gray-400 font-semibold">/ 10,000 元</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 動態進度條組 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                <!-- 進度條 1: 日更完成率 -->
+                <div class="bg-white/90 p-4 rounded-2xl border border-pink-100/50 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-black text-[#2a1621]">📅 6月日更挑戰進度</span>
+                            <span class="text-xs font-black text-[#ec4899]" id="challengeDaysText">0 / 30 天 (0%)</span>
+                        </div>
+                        <div class="w-full bg-pink-50 rounded-full h-3 overflow-hidden border border-pink-100/30">
+                            <div id="challengeDaysBar" class="bg-gradient-to-r from-pink-400 to-[#ec4899] h-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-[#8b6b78] mt-3">💡 系統自動統計<b>六月份</b>中狀態為「<b>已發布</b>」的貼文卡片數量。</p>
+                </div>
+
+                <!-- 進度條 2: 粉絲達標率 -->
+                <div class="bg-white/90 p-4 rounded-2xl border border-pink-100/50 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-black text-[#2a1621]">▫️ 粉絲達標率 (100粉)</span>
+                            <span class="text-xs font-black text-pink-500" id="challengeFollowersText">0 / 100 (0%)</span>
+                        </div>
+                        <div class="w-full bg-pink-50 rounded-full h-3 overflow-hidden border border-pink-100/30">
+                            <div id="challengeFollowersBar" class="bg-gradient-to-r from-pink-400 to-pink-500 h-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-[#8b6b78] mt-3">🎯 目標 100 粉絲！今日發文後記得到限動建立投票，強化與粉絲的共鳴互動！</p>
+                </div>
+
+                <!-- 進度條 3: 月收入進度 -->
+                <div class="bg-white/90 p-4 rounded-2xl border border-pink-100/50 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-black text-[#2a1621]">▫️ 月收入進度 (10,000元)</span>
+                            <span class="text-xs font-black text-purple-600" id="challengeRevenueText">0 / 10,000 (0%)</span>
+                        </div>
+                        <div class="w-full bg-pink-50 rounded-full h-3 overflow-hidden border border-pink-100/30">
+                            <div id="challengeRevenueBar" class="bg-gradient-to-r from-purple-400 to-purple-600 h-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-[#8b6b78] mt-3">💰 只要在 6 月內成交約 5 個一對一深度個案預約，即刻突破 10,000 元大關！</p>
+                </div>
+            </div>
+        </section>
 
         <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <!-- 月份主題 -->
@@ -172,7 +252,7 @@
                     <div class="text-xs font-black tracking-wider text-[#ec4899] mb-1">INTERACTIVE VISUAL CALENDAR</div>
                     <h2 class="text-xl sm:text-2xl font-black text-[#2a1621]">排程網格總覽</h2>
                 </div>
-                <span class="text-xs bg-pink-100 text-[#ec4899] font-black px-3 py-1.5 rounded-full">💡 點選月曆格中的貼文標籤，可以立刻幫您平滑定位到該篇文案卡片！點擊空白處可快速建檔。</span>
+                <span class="text-xs bg-pink-100 text-[#ec4899] font-black px-3 py-1.5 rounded-full">💡 點選月曆格中的貼文標籤，可以立刻幫您平滑定位到該篇文案卡片！「⭐」代表您原訂的核心主打企劃。</span>
             </div>
             <!-- 月曆網格容器 -->
             <div id="calendarGridContainer" class="bg-white/50 rounded-2xl p-4 overflow-x-auto">
@@ -206,11 +286,11 @@
     </div>
 
     <script>
-        const STORAGE_KEY = "heartjump_html_calendar_v4_yearly";
+        const STORAGE_KEY = "heartjump_html_calendar_v5_yearly";
 
         const monthThemes = {
             "2026-05": { title: "幸運開獎 × 戀愛宇宙暖身月", goal: "以趣味、生活感的互動占卜建立心小跳的暖心人設，累積初始粉絲信任與互動率。" },
-            "2026-06": { title: "曖昧升溫 × 深夜陪伴月", goal: "強化深度陪伴感，聚焦曖昧與深夜情緒，大幅衝高貼文收藏數與轉發率。" },
+            "2026-06": { title: "曖昧升溫 × 30天日更不中斷挑戰月 🔥", goal: "目標：挑戰每日不停更！粉絲達標 100 粉、月收入達 10,000 元！聚焦深夜溫柔陪伴與極致共鳴，導流一對一私訊。" },
             "2026-07": { title: "夏日桃花 × 高流量占卜月", goal: "利用高共鳴桃花題材與趣味心理測驗抓取暑期流量，帶入個人塔羅諮詢私訊 (DMs)。" },
             "2026-08": { title: "靈魂整理 × 人森觀察月", goal: "主打「心小跳人森觀察室」IP，針對清醒、自愛、告別爛人等自愛題材提升忠誠度。" },
             "2026-09": { title: "秋日顯化 × 事業財富躍進月", goal: "切入開學與求職潮！主打財富磁場吸引力、突破困境、搞錢指南，帶動個人事業占卜諮詢高轉換。" },
@@ -224,7 +304,7 @@
             // ================= 5 月 (2026-05) =================
             {
                 id: 101, month: "2026-05", week: 1, day: "週一", date: "2026-05-04", time: "22:40", platform: "Threads", type: "深夜情緒碎片",
-                title: "這個月也辛苦了", content: "有些人不是不累。\n只是習慣在人群前把自己按成靜音，回到房間才敢偷偷卸下防備。🌙\n\n新的一個月，可以繼續努力，但也別忘了抱抱辛苦的自己。",
+                title: "這個月也辛苦了", content: "有些人不是不累。\n公家習慣在人群前把自己按成靜音，回到房間才敢偷偷卸下防備。🌙\n\n新的一個月，可以繼續努力，但也別忘了抱抱辛苦的自己。",
                 cta: "留言一句：『我今天先放過自己。』", task: "深夜22點直接發 Threads，用純文字建立安心的深夜氣氛。",
                 note: "月初暖身陪伴文，拉近粉絲距離。", status: "已發布", likes: 320, comments: 45, saves: 110, shares: 35, dms: 8
             },
@@ -242,7 +322,7 @@
             },
             {
                 id: 104, month: "2026-05", week: 2, day: "週一", date: "2026-05-11", time: "20:10", platform: "Threads", type: "奶茶式戀愛翻譯",
-                title: "水瓶男翻譯機", content: "常有人問我水瓶男到底在想什麼？\n\n其實水瓶座不是不回訊息，\n他只是在等一個『自己突然很想回』的契機。\n\n不要奪命連環催，當你活得比他更像風，他自己就會飄回來黏你。🌬️",
+                title: "水瓶男翻譯機", content: "常有人問我水瓶男到底在想什麼？\n\n其實水瓶座不是不回訊息，\n他只是在等一個『自己偷偷很想回』的契機。\n\n不要奪命連環催，當你活得比他更像風，他自己就會飄回來黏你。🌬️",
                 cta: "留言你最看不懂的星座，下期我們來翻譯！", task: "字數精簡，排版空行要多，製造空氣感。",
                 note: "星座吐槽文，高互動、高標記率題型。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
@@ -278,14 +358,14 @@
             },
             {
                 id: 110, month: "2026-05", week: 4, day: "週二", date: "2026-05-26", time: "20:00", platform: "Threads", type: "占卜導流",
-                title: "最近戀愛腦的客人有點多", content: "這幾天一打開預約，滿滿都是：\n『他到底有沒有喜歡我？』『我們會複合嗎？』\n\n看來宇宙磁場最近真的很吵雜。🙂\n心不定時，抽再多大眾占卜也只是尋求短暫安慰。\n如果想要深度的解答，或許我們可以一對一，好好聊聊你的星盤與塔羅牌。",
+                title: "最近戀愛腦的客人有點多", content: "這幾天一打開預約，滿滿都是：\n『他到底有沒有喜歡我？』『我們會複合嗎？』\n\n看來宇宙磁場最近真的很吵雜。🙂\n心不定時，抽再多大眾占卜也只是尋求短暫安慰。\n如果手動想要深度的解答，或許我們可以一對一，好好聊聊你的星盤與塔羅牌。",
                 cta: "私訊【個人占卜】，讓我幫你把心裡吵鬧的部分安靜下來。", task: "自然、軟性的諮詢服務置入，不強迫推銷，保持高冷溫柔感。",
                 note: "月末轉化導流，篩選出真正有需求的付費顧客。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
             {
                 id: 111, month: "2026-05", week: 4, day: "週四", date: "2026-05-28", time: "21:30", platform: "Threads", type: "奶茶式戀愛翻譯",
                 title: "他不是冷淡，他只是...", content: "很多人感情卡關，都以為對方變冷淡了。\n\n其實他只是把情緒收進了冰箱。\n而妳剛好，傻傻地一直站在冰箱門口等著他開門，被冷風吹得發抖。⛄\n\n把手放進口袋吧，去給需要你溫度的其他地方，別在冷藏室裡等春天。",
-                cta: "點擊收藏，當你又想回頭等冷風時，拿出來看看。", task: "Threads 爆款金句短文發布，可以同步截圖發至 IG 限時動態。",
+                cta: "點擊收藏，當妳又想回頭等冷風時，拿出來看看。", task: "Threads 爆款金句短文發布，可以同步截圖發至 IG 限時動態。",
                 note: "情感警世文，擊中卡在曖昧或冷暴力關係中的受眾。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
             {
@@ -295,78 +375,186 @@
                 note: "溫馨治癒，完美結尾，提高粉絲黏著度與歸屬感。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
 
-            // ================= 6 月 (2026-06) =================
+            // ================= 6 月 (2026-06) 30天日更不中斷挑戰專屬 =================
             {
                 id: 201, month: "2026-06", week: 1, day: "週一", date: "2026-06-01", time: "22:00", platform: "Threads", type: "深夜情緒碎片",
-                title: "歡迎來到深夜陪伴月", content: "六月來了，這個月的夜裡，心小跳會多陪陪你。\n\n聽說，人在晚上特別容易想起那些不該想的人。\n那就在這裡，把你想對他說但不能說的話，寫在留言區，讓風帶走吧。🍃",
-                cta: "在這裡留下你想對『那個人』說的一句話，不寫名字也沒關係。", task: "深夜22點準時發文。留言區不限長短，當作免費樹洞。",
-                note: "六月主題『深夜陪伴』宣告，引發大量樹洞效應。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+                title: "日更 Day 1 🚀 六月來了，給靈魂一個溫暖承諾", content: "六月的第一天，晚風裡開始有了夏天的汽水味。\n小跳宣布：這三十天，我要挑戰「每日不中斷更新」！🙌🏻\n\n有些晚安，其實是在等妳挽留。今晚不論妳在哪裡，心小跳在這裡當妳最強的深夜抱抱樹洞，這一個月不打烊。🌙",
+                cta: "留言：『gogogo！』給今晚勇敢跨出第一步的自己拍拍手！", task: "深夜22:00點發Threads，文字排版預留呼吸感。",
+                note: "日更起跑Flag！立下挑戰目標，並宣告深夜樹洞陪伴人設，拉高首日凝聚力。", status: "已發布", likes: 110, comments: 24, saves: 18, shares: 5, dms: 3
             },
             {
-                id: 202, month: "2026-06", week: 1, day: "週三", date: "2026-06-03", time: "20:30", platform: "IG", type: "大眾占卜",
-                title: "他心裡有打算主動找你嗎？", content: "曖昧卡住了、斷聯好幾天了...\n你還在苦苦盯著對話框嗎？點擊直覺，抽一張塔羅牌，測他心底最真實的打算。🔮\n\nA｜正在憋氣中，等合適時機主動（聖杯侍從）\nB｜享受目前的距離，暫時不打算打破（隱士）\nC｜他其實也在等妳主動，彼此在比嘴硬（權杖二）\nD｜生活太忙碌，感情目前退居其次了（星幣八）",
-                cta: "留言妳的選項，看解析他什麼時候會打破沉默！", task: "製作柔和偏暗色調、有神祕水晶球意境的占卜圖卡，隔天留言更新詳細指引。",
-                note: "正中曖昧斷聯者的痛點，預期私訊諮詢率大幅提升。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+                id: 202, month: "2026-06", week: 1, day: "週二", date: "2026-06-02", time: "20:30", platform: "IG", type: "大眾占卜", isOriginal: true,
+                title: "日更 Day 2 🔮 他心裡，目前有打算主動找你嗎？", content: "曖昧斷聯、隔空憋氣好幾天了...\n妳還在不自覺狂刷他的對話框嗎？深吸一口氣，憑第一直覺抽一張塔羅牌，看看他心裡最真實的盤算。⚖️\n\nA｜憋氣到極限，正找藉口主動找妳\nB｜享受目前的神秘感，想繼續欲擒故縱\nC｜其實他也在等妳低頭，彼此比誰嘴硬\nD｜重心在工作，感情暫時被他冷藏了",
+                cta: "留言你的『選項代碼』，明天中午留言區準時公布超準解析！", task: "製作神祕紫色系帶有黑貓元素的四宮格占卜圖，排程發布。",
+                note: "大眾占卜高互動率题型，抓取猶豫不決、處於斷聯期的精準粉絲。", status: "已發布", likes: 145, comments: 48, saves: 25, shares: 12, dms: 5
             },
             {
-                id: 203, month: "2026-06", week: 1, day: "週五", date: "2026-06-05", time: "21:00", platform: "Threads", type: "心小跳人森觀察室",
-                title: "你不是真的想要答案", content: "很多女生來找我占卜，算完他愛不愛、回不回之後，\n其實眼神裡早就寫好答案了。\n\n妳們來找我，其實不是真的想要牌組告訴你答案。\n妳們裝著需要，其實只是需要有人，很溫柔、很堅定地支持妳，陪妳去承認那個妳早就知道的真相。🙂",
-                cta: "對嗎？如果是，點兩下心心，今晚別哭了。", task: "純文字寫作，文字語氣務必沉穩、包容，帶著點看穿一切的溫暖。",
-                note: "戳破假象，建立專業、具備心理諮商感的占卜師形象。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+                id: 203, month: "2026-06", week: 1, day: "週三", date: "2026-06-03", time: "21:00", platform: "Threads", type: "心小跳人森觀察室",
+                title: "日更 Day 3 👀 妳不是想要答案，妳只是想被溫柔叫醒", content: "很多小仙女來找我占卜，問完「他愛不愛我、會不會回頭」之後，眼神其實早就寫好心知肚明的答案了。\n\n妳們裝著需要牌組，其實，只是需要有一個人，能無比溫柔、無比堅定地抱抱妳，陪著妳去承認那個，妳早就知道卻不敢面對的真相。🙂",
+                cta: "對嗎？如果是，按個兩下心心，今晚別一個人偷偷哭了。", task: "Threads 撰寫清醒卻極富同理心的文字，睡前搭配月亮貼圖發送。",
+                note: "建立看透本質卻不失溫度的專業諮商師人設，高收藏潛力。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
             {
-                id: 204, month: "2026-06", week: 2, day: "週二", date: "2026-06-09", time: "20:00", platform: "Threads", type: "奶茶式戀愛翻譯",
-                title: "男生『我想靜靜』的真實翻譯", content: "當一個男生對你說：『我最近壓力很大，想一個人靜靜。』\n\n❌ 妳以為的翻譯：他遇到困難了，我應該多關心他、給他做愛心便當。\n\n✅ 真實世界的翻譯：他目前對這段關係的熱度下降了，覺得跟妳相處有點累，希望妳暫時退後，讓他有點新鮮空氣。這時請妳立刻去跟閨蜜逛街看帥哥，越冷靜越好。",
-                cta: "有被點醒的，默默收藏就好，不要去罵他。🙂", task: "以清爽簡單的對比圖文或直接 Threads 發表。",
-                note: "乾貨式戀愛避坑指南，收藏潛力極高。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+                id: 204, month: "2026-06", week: 1, day: "週四", date: "2026-06-04", time: "20:10", platform: "Threads", type: "奶茶式戀愛翻譯", isOriginal: true,
+                title: "日更 Day 4 ☕ 男生說「想靜靜」的真實世界翻譯", content: "當一個男生對妳說：「我最近壓力很大，想一個人靜一靜。」\n\n❌ 妳腦補的翻譯：他遇到挫折了，我應該送溫暖、天天問候他。\n✅ 真實世界的翻譯：我對這段關係暫時降溫了，覺得有點喘不過氣，想拉開安全距離。此時最聰明的做法是：立刻冷下來，過好妳自己的精采生活。妳越神秘，他越慌。🙂",
+                cta: "點擊收藏！當妳下回又忍不住想發小作文給他時，拿出來多看三遍！", task: "Threads 發文。字句精煉、排版留白多，製造輕鬆對比感。",
+                note: "高轉發的感情避坑指南。擊中高焦慮型依戀受眾。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
             {
-                id: 205, month: "2026-06", week: 2, day: "週四", date: "2026-06-11", time: "19:30", platform: "限動", type: "生活感互動",
-                title: "深夜專用：隨機抽一張能量卡", content: "閉上眼，截圖下面這一頁，看看宇宙今晚要給你的安神話語是哪一句？☕\n\n（卡片一：『累了就睡，明天又是新的一局。』）\n（卡片二：『妳沒有做錯任何事，是他配不上妳的細心。』）\n（卡片三：『允許所有事情發生，因為它們都是來渡妳的。』）",
-                cta: "截圖分享到你的限動，並 tag 心小跳，我會親自為你說一句晚安！", task: "製作動態 GIF 或快速輪播影片，讓受眾透過螢幕截圖方式互動。",
-                note: "極高轉發與裂變機會，tag 轉發能吸引對方的朋友關注。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+                id: 205, month: "2026-06", week: 1, day: "週五", date: "2026-06-05", time: "19:30", platform: "限動", type: "生活感互動",
+                title: "日更 Day 5 🔴 週五專屬：今晚開啟靈魂大掃除！", content: "辛苦一整個禮拜了！小跳今晚要把沒營養的工作群組按靜音、把前任的通知關掉。\n\n今晚的情緒溫度計，妳在哪一格？\n❤️ 忙透了，但今晚準備爆吃一頓\n💚 心如止水，早早躺床放空\n\n（匿名留言框：寫下一件妳今晚想『徹底丟掉』的煩惱，小跳幫妳抽牌！）",
+                cta: "點擊限動投票，並在匿名框留下妳的情緒餘溫。", task: "實拍一張工作室溫暖角落，套用限動投票與問答框。",
+                note: "無壓力週五生活感互動，收集粉絲深夜煩惱作為往後占卜素材。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
             {
-                id: 206, month: "2026-06", week: 2, day: "週六", date: "2026-06-13", time: "20:45", platform: "IG", type: "高流量占卜",
-                title: "未來三個月，哪種曖昧會開花結果？", content: "夏天快到了，空氣裡的曖昧分子也開始發酵。\n身邊那個若即若離的人，真的能陪你走到秋天嗎？\n\nA｜微風般的關係（看似平淡卻默默滲透）\nB｜雷雨般的熱烈（來得快去得也快，需要小心）\nC｜午後斜陽（雖然緩慢，但溫暖持久）\nD｜冷氣房的試探（雖然在同個空間，但始終有層隔閡）",
-                cta: "留言你的曖昧類型選項，明天我們來看看牌卡有什麼升溫魔法！", task: "製作極致夢幻的馬卡龍色系選項卡片，附上隔天留言區的詳細解析與塔羅神諭卡指引。",
-                note: "鎖定曖昧中人群，提高互動，在留言區置入諮詢連結。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+                id: 206, month: "2026-06", week: 1, day: "週六", date: "2026-06-06", time: "20:40", platform: "IG", type: "高流量占卜", isOriginal: true,
+                title: "日更 Day 6 🐱 他心底，偷偷給妳貼了哪種神秘標籤？", content: "每個人心裡都有一格秘密分類卡。\n在他最深層的潛意識裡，妳被歸類在什麼樣的獨特濾鏡之下？✨\n\nA｜黑貓（有著致命吸引力卻難以馴服的獵物）\nB｜白月光（美好、溫柔卻始終隔著一層距離）\nC｜雙生鏡（能看透他所有脆弱與偽裝的靈魂伴侶）\nD｜音樂盒（每當心情煩悶時，點開就覺得無比治癒）",
+                cta: "留言你的選項（A/B/C/D）並收藏，明天午間公布妳的致命魔力解析！", task: "設計浪漫復古風插畫選項圖卡，色調微帶粉調神祕感。",
+                note: "高流量感情投射題，激發曖昧中受眾與斷聯者強烈的探索心理。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
             {
-                id: 207, month: "2026-06", week: 3, day: "週一", date: "2026-06-15", time: "22:15", platform: "Threads", type: "深夜情緒碎片",
-                title: "敏感不是病，是你太溫柔", content: "『我是不是太敏感了？』『我是不是想太多了？』\n\n別再因為別人的粗心，而回過頭來指責自己的細緻。\n妳的敏感，代表妳能感受到風的溫度、花開的聲音，代表妳有一顆無比柔軟且珍貴的心。該反省的，是那個糟蹋妳溫柔的人。❤️",
-                cta: "如果這句話有溫暖到妳，留言留下一朵 🌸 吧。", task: "深夜溫馨短文，配合簡單的淡粉色背景圖，讓人看了想哭卻被治癒。",
-                note: "高高度的情感共鳴，鎖定高敏感、缺安全感的粉絲。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+                id: 207, month: "2026-06", week: 1, day: "週日", date: "2026-06-07", time: "23:00", platform: "Threads", type: "深夜療癒文",
+                title: "日更 Day 7 🌙 恭喜妳，陪小跳完成了日更第一週！", content: "不知不覺，日更挑戰來到第七天了。\n這禮拜，妳是不是也跟著小跳一起，每天都在勇敢地整理生活？\n\n心小跳這裡可能沒辦法立刻治好生活給妳的挫折，但我希望在妳因為某個不回訊息的人、某件糟糕的事而失眠的夜裡，讓妳覺得：『原來世界上，也有人懂我的傻。』這樣，日更就有了最大意義。晚安。✨",
+                cta: "留言：『晚安，辛苦的自己。』為我們的第一週乾杯！", task: "睡前純文字深夜陪伴感發布，搭配溫暖月亮 emoji。",
+                note: "第一週節點收網，強化鐵粉黏性，營造「與小跳一同蛻變」的共生氛圍。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
             {
-                id: 208, month: "2026-06", week: 3, day: "週三", date: "2026-06-17", time: "20:30", platform: "IG", type: "大眾占卜",
-                title: "他對妳的真心程度到底有幾分？", content: "甜言蜜語背後，有幾分是套路，又有幾分是真情？\n深吸一口氣，讓塔羅牌幫你撥開迷霧看清他的真心。🔍\n\nA｜30%（好感是有，但更愛他自己的自由）\nB｜60%（真心想對你好，但還有一些現實顧慮）\nC｜90%（把你放進了未來規劃裡，嘴笨但很疼妳）\nD｜10%（只是無聊時的陪伴，請快點清醒抽離！）",
-                cta: "留言選項並分享給妳最好的閨蜜，看妳有沒有被戀愛腦沖昏頭！", task: "卡片視覺以放大鏡、粉紅色愛心、以及塔羅牌背為主，風格保持可愛與專業並重。",
-                note: "高傳播度，閨蜜之間互相分享討論機率高。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+                id: 208, month: "2026-06", week: 2, day: "週一", date: "2026-06-08", time: "22:15", platform: "Threads", type: "深夜情緒碎片",
+                title: "日更 Day 8 🥀 再主動的人，心也是會變涼的", content: "很多人都以為，那個天天給妳發早安、問妳在幹嘛的人，永遠不會走。\n\n其實，主動發出的每一條訊息，都是在拿溫暖去試探妳的溫度。\n當期待落空太多次，再熱的心，也會在一瞬間冷卻。當她突然安靜了、不吵不鬧了，不是懂事了，是她終於決定放手，收回對妳的配得感了。🙂",
+                cta: "這句送給那個總是被動等待、直到失去才後悔的人。點讚共勉。", task: "深夜22:15分直接發 Threads，文字語氣帶著微微冷酷卻治癒的基調。",
+                note: "批中關係中感到心累的奉獻者，高收藏與高轉發潛力題。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
             {
-                id: 209, month: "2026-06", week: 3, day: "週五", date: "2026-06-19", time: "19:40", platform: "限動", type: "占卜導流",
-                title: "深夜樹洞回信 📬", content: "前幾天收到一位粉絲匿名留言：『跟初戀分手三年了，依然會在深夜哭醒，我是不是很沒用？』\n\n小跳想跟妳說：忘不掉是因為妳認真愛過，這不丟臉。但別把青春一直獻給不會回來的人。\n如果你也卡在一段走不出的回憶裡，來找小跳吧，我們用個人占卜幫妳理理頭緒。",
-                cta: "點擊連結預約私訊，今晚我們把心裡的雨停下來。", task: "限動做三頁：第一頁截圖匿名信、第二頁溫柔解析、第三頁置入預約連結。",
-                note: "故事化行銷導流，極易打動有深層情感卡關的潛在客戶。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+                id: 209, month: "2026-06", week: 2, day: "週二", date: "2026-06-09", time: "20:30", platform: "IG", type: "大眾占卜", isOriginal: true,
+                title: "日更 Day 9 🍷 妳身上，會讓人產生哪種「愛意戒斷反應」？", content: "有些人一旦遇過、深愛過，就很難在記憶裡連根拔起。\n妳身上自帶的獨特荷爾蒙，會在斷聯或分開後，讓人產生什麼癮頭？✨\n\nA｜香水般的依賴（走在街上聞到相似氣味就瘋狂想妳）\nB｜烈酒般的微醺（安靜下來時，妳的眼底笑意就反覆浮現）\nC｜薄荷糖的清涼（失去妳之後，覺得接下來遇見的人都索然無味）\nD｜小貓般的抓癢（一到深夜就忍不住點進妳的主頁，百爪撓心）",
+                cta: "留言妳的戒斷代碼，明天中午公布妳有多讓人欲罷不能！", task: "製作偏復古微醺紅酒與玫瑰花瓣點綴的 IG 大众占卜卡片。",
+                note: "高流量桃花人設魅力題，放大受眾的自我配得感與吸引力信心。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
             {
-                id: 210, month: "2026-06", week: 4, day: "週一", date: "2026-06-22", time: "21:00", platform: "Threads", type: "心小跳人森觀察室",
-                title: "沒有回覆，就是最好的回覆", content: "妳還在翻來覆去，想著為什麼他沒回妳這條訊息嗎？\n妳在腦補他是不是手機掉了、出車禍了、工作太忙了...\n\n清醒點吧，他只是沒那麼想理妳而已。🙂\n在這個人人手機不離手的時代，不回覆，其實就是他給妳最明確、最體面的拒絕了。別再幫他找藉口了。",
-                cta: "留言同意的，按個讚，我們一起把置頂對話框取消掉。", task: "辛辣卻溫柔的清醒金句，文字短小精練，適合轉發。",
-                note: "月末毒舌清醒文，與之前的陪伴感形成對比，彰顯豐富的品牌性格。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+                id: 210, month: "2026-06", week: 2, day: "週三", date: "2026-06-10", time: "21:00", platform: "Threads", type: "心小跳人森觀察室",
+                title: "日更 Day 10 🛋️ 談戀愛不是在比嘴硬，是在比誰有底氣", content: "現在的人談戀愛，很像兩個人隔著銀幕，比誰能忍著不發第一條訊息、比誰先裝出不在乎的樣子。\n\n實則不然，真正的愛，是不需要靠『誰先低頭』來證明的。\n妳不敢主動，是因為怕受傷；他不敢主動，是因為怕丟臉。當兩個人都在算計得失時，這段關係就已經成了商業談判，而不是心跳了。🙂",
+                cta: "妳是嘴硬不說派，還是憋不住直接問派？留言聊聊！", task: "Threads 發文。切入當代社交冷漠痛點，引導粉絲在評論區各抒己見。",
+                note: "人森觀察室系列，戳破感情假面，引導深度互動。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
             {
-                id: 211, month: "2026-06", week: 4, day: "週四", date: "2026-06-25", time: "20:00", platform: "IG", type: "大眾占卜",
-                title: "下半年，你的靈魂正在召喚什麼好運？", content: "不知不覺，2026年也過了一半了。\n過去六個月，不論過得順不順利，都已經是昨天的事。\n接下來這半年，你的靈魂渴望迎來什麼樣的蛻變？☀️\n\nA｜豐盛財富之鑰（星幣皇后）\nB｜靈魂伴侶與深層連結（戀人牌）\nC｜事業突破與全新舞台（戰車牌）\nD｜內在平靜與自我療癒（女祭司）",
-                cta: "留言選項，並對自己說：『我準備好迎接最棒的下半年了！』", task: "黃金色、陽光、向日葵風格的亮眼設計，隔天補上正能量滿滿的詳細解答卡。",
-                note: "年中盤點正面題材，適合所有人，能大幅提振互動熱度。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+                id: 211, month: "2026-06", week: 2, day: "週四", date: "2026-06-11", time: "20:15", platform: "Threads", type: "奶茶式戀愛翻譯", isOriginal: true,
+                title: "日更 Day 11 ❄️ 他不是冷淡，他只是把妳收進冰箱了", content: "常有仙女問我：『小跳，他突然回得很慢、很冷淡，是不是忙？』\n\n別再傻傻幫他找理由了。\n他不是忙，他只是把妳的情緒收進了冰箱，成了隨手可得的冷藏品。\n而妳剛好，傻傻地一直站在打開的冰箱門口等他，被冷風吹得發抖。⛄\n把手放進溫暖的口袋吧，去值得的地方，別在冷藏室等春天。",
+                cta: "點擊收藏，當妳又想站在冷風中等待時，拿出來敲醒自己！", task: "Threads 發文，可截圖同步至 IG 限時動態，製造雙平台擴散。",
+                note: "超強共鳴清醒文，是心小跳的經典毒舌卻溫柔的語氣，收藏率極高。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
             {
-                id: 212, month: "2026-06", week: 4, day: "週日", date: "2026-06-28", time: "22:30", platform: "Threads", type: "月末總結",
-                title: "再見六月，把執念留給昨天吧", content: "六月的最後一個晚上。\n謝謝你這個月，不論有多累，依然按時陪伴在心小跳身邊。\n\n答應我，過了今晚，那些不回訊息的人、那些讓你掉淚的遺憾，就留在六月的夜裡，好嗎？七月，我們去曬太陽，去變更漂亮！💃",
-                cta: "留言一句：『六月辛苦了，七月我只愛自己。』", task: "溫暖催淚的謝幕短文，深夜 22:30 發布。",
-                note: "完美結束深夜陪伴月，建立強烈粉絲歸屬感，迎接陽光的七月桃花月。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+                id: 212, month: "2026-06", week: 2, day: "週五", date: "2026-06-12", time: "19:30", platform: "限動", type: "生活感互動",
+                title: "日更 Day 12 ☕ 降溫／熱拿鐵／別對爛人太有耐心", content: "（照片：手捧一杯散發暖意、印有貓咪拉花的熱拿鐵）\n\n今天給自己點了最愛的榛果拿鐵。順便提醒大家：辛苦工作了一週，週末今晚適合吃好一點、睡飽一點。也適合把一些無用的消耗關係看清楚一點。胃跟心，今晚總要先救一個吧！",
+                cta: "限動：今晚妳最想用什麼食物來療癒自己？（附問答框）", task: "發送生活實拍圖搭配手寫質感文字與限動問答框。",
+                note: "生活感軟性連結，建立陪伴溫度，降低純塔羅廣告感。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+            },
+            {
+                id: 213, month: "2026-06", week: 2, day: "週六", date: "2026-06-13", time: "20:45", platform: "IG", type: "高流量占卜", isOriginal: true,
+                title: "日更 Day 13 🌟 未來三個月，哪種「靈魂好運」正朝妳狂奔？", content: "告別了五月的迷茫與糾結，六月的能量場正在悄悄重洗。\n在接下來的三個月裡，妳的吸金與幸福磁場，即將在哪个領域迎來驚天開掛？☀️\n\nA｜豐盛星幣（副業或事業有高人提攜，進帳滿滿）\nB｜命中戀人（遇到與妳磁場完美契合的雙向奔赴對象）\nC｜女祭司的平靜（甩開焦慮內耗，直覺力與配得感大暴漲）\nD｜太陽的解脫（懸著的那件煩心事徹底解決，重獲自由）",
+                cta: "留言：『我準備好開掛了！』接通妳的開運通道，明日看詳細解讀卡！", task: "視覺改用金燦燦帶有陽光、向日葵與精美星宿魔法陣的卡牌，亮麗大氣。",
+                note: "周末正能量高互動題，用「接好運」暗示衝高洗板留言率。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+            },
+            {
+                id: 214, month: "2026-06", week: 2, day: "週日", date: "2026-06-14", time: "22:30", platform: "Threads", type: "占卜導流",
+                title: "日更 Day 14 🔮 日更兩週達成！深夜聊聊：什麼是真正的「配得感」", content: "這兩天幫好幾個女生做個人占卜，我發現很多人明明能力、顏值都在線，卻總在感情和工作中，委屈自己去拿最低限度的待遇。\n\n『我不配吧？』『他對我冷淡一定是我的問題。』\n親愛的，這叫匱乏。新的一週，請冷酷地收起自我懷疑，大膽相信：『我值得最好的一切！』",
+                cta: "私訊【個人占卜】，今晚我們用星盤與塔羅，把妳丟失的配得感找回來。", task: "Threads 發文。後半段置入一對一感情與能量諮詢導流，語氣懇切溫柔。",
+                note: "日更半個月的中點導流文，目標轉化一對一個案預約，衝刺 10,000 元月收入！", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+            },
+            {
+                id: 215, month: "2026-06", week: 3, day: "週一", date: "2026-06-15", time: "22:40", platform: "Threads", type: "深夜情緒碎片",
+                title: "日更 Day 15 🚀 挑戰過半！有些在乎，不一定非要說出口", content: "日更挑戰不知不覺來到第 15 天，後半程我們繼續衝！\n\n妳有沒有發現，長大後最穩定的默契，\n是明明在意得要死，\n卻還是在對話框裡打下「沒事，你先忙吧」。🙂\n\n我們學會了不打擾，也學會了把最深的想念，按成了靜音鍵。",
+                cta: "按個愛心拍拍彼此，今晚，放過那個嘴硬不說的自己吧。", task: "深夜22:40分Threads發布，簡短深刻，適合收藏。",
+                note: "經典高收藏深夜碎片文，與高焦慮敏感粉絲建立靈魂連結。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+            },
+            {
+                id: 216, month: "2026-06", week: 3, day: "週二", date: "2026-06-16", time: "20:30", platform: "IG", type: "大眾占卜", isOriginal: true,
+                title: "日更 Day 16 🌪️ 哪種性格的人，最容易被妳的神祕感搞瘋？", content: "有些人本來在別的關係裡無比理性、游刃有餘。\n可一旦遇見妳，就立刻系統錯亂、吃醋失控。妳身上自帶的神祕磁場，對誰殺傷力最強？🔍\n\nA｜萬年嘴硬、自尊心極強的傲嬌怪（劍五 -> 被妳逼到主動示弱）\nB｜絕對理性、條理分明的控制狂（星幣國王 -> 為妳失控亂想）\nC｜享受暧昧、若即若離的浪子（惡魔牌 -> 突然想要安定下來）\nD｜沒安全感、天天腦補的敏感情人類（聖杯騎士 -> 對妳徹底上頭）",
+                cta: "留言選項 + 點擊收藏，明天揭曉誰最容易被妳無聲攻陷！", task: "製作神秘玫瑰與鎖鏈剪影的 IG 大眾占卜圖卡。",
+                note: "反向特質探索題，增加受眾自信，容易引發粉絲與閨蜜互相分享探討。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+            },
+            {
+                id: 217, month: "2026-06", week: 3, day: "週三", date: "2026-06-17", time: "21:20", platform: "Threads", type: "心小跳人森觀察室",
+                title: "日更 Day 17 💳 成年人最穩定的安全感，往往在卡片餘額裡", content: "以前覺得，談戀愛有人天天秒回、不離不棄，就是最棒的安全感。\n\n後來被生活重錘了幾次才明白，\n人會變，承諾會過期，對話框會安靜。\n只有卡片裡的存款、自己的一技之長、以及冷靜清醒的腦袋，才會在妳落魄時，無條件地給妳挺直腰杆的底氣。🙂",
+                cta: "同意的不用多說，默默點兩下心心，我們一起去當有錢的大女主！", task: "Threads 發文。文字帶點辛辣、寫實風格，契合獨立女性思想。",
+                note: "搞錢與女性自立題材，是吸粉與提高帳號格局的爆款方向。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+            },
+            {
+                id: 218, month: "2026-06", week: 3, day: "週四", date: "2026-06-18", time: "20:10", platform: "Threads", type: "奶茶式戀愛翻譯", isOriginal: true,
+                title: "日更 Day 18 💤 有些人說「睡了」，其實只是跑去獨自 emo 了", content: "當一個經常跟妳聊到深夜的人，突然在晚上十點半對妳說：『我今天有點累，先睡了晚安。』\n\n妳以為的翻譯：他今天真的很辛苦，我應該讓他好好休息。\n真實世界的翻譯：他的能量今晚用光了，或者他不想再維持高頻互動，想縮回自己安靜的殼裡去emo。此時請保持高冷，回一個簡單的『好，晚安』即可，千萬別追問『你怎麼了』。🙂",
+                cta: "妳是『識趣退後派』，還是『焦慮追問派』？留言寫下妳的回應！", task: "Threads 互動發文，字句簡潔，多空行。",
+                note: "實用關係退防技巧，高共鳴度，易在留言區引發長文探討。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+            },
+            {
+                id: 219, month: "2026-06", week: 3, day: "週五", date: "2026-06-19", time: "19:30", platform: "限動", type: "生活感互動",
+                title: "日更 Day 19 🕯️ 週五晚間的情緒收容所", content: "（照片：工作室裡燃燒著的粉晶草藥顯化蠟燭，光芒搖曳、精緻療癒）\n\n今晚不工作、不回訊息，工作室點了白鼠尾草，給一整週積攢的雜亂能量做最後的大掃除。如果妳心裡也有無處安放的委屈，都寫在下面箱子裡吧。小跳等會隨機挑 10 位仙女，用卡牌給妳最溫暖的冬日抱抱指引！",
+                cta: "點擊匿名問題框：『寫下妳今晚最想釋放的一句不甘心...』", task: "實拍顯化蠟燭照片，放上匿名問答貼紙，營造高奢神祕的療癒空間感。",
+                note: "高情感濃度樹洞，為週末一對一諮詢產品做軟性預熱鋪墊。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+            },
+            {
+                id: 220, month: "2026-06", week: 3, day: "週六", date: "2026-06-20", time: "20:40", platform: "IG", type: "高流量占卜", isOriginal: true,
+                title: "日更 Day 20 ⛓️ 他對妳，是一時興起的征服欲，還是非妳不可的執念？", content: "曖昧時的甜言蜜語聽得多了，妳分得清他是套路還是真情嗎？\n有些熱烈，來得快去得也快。\n深吸一口氣，塔羅牌幫妳撥開宿命的迷霧，看看他的真實磁場。⚖️\n\nA｜惡魔牌（強烈的荷爾蒙吸引與征服欲，需要保持清醒防禦）\nB｜權杖六（享受曖昧互動的虛榮感，對妳的付出視為理所當然）\nC｜星幣十（非常踏實，已經默默把妳放進他的長期未來規劃中）\nD｜聖杯八（雖然有感情，但他心底有現實障礙或過不去的坎，正考慮退縮）",
+                cta: "留言選項 + 點擊收藏，明天中午十二點公布妳的專屬解套指南卡！", task: "視覺走黑金奢華、命運鎖鏈與塔羅牌背結合的高清質感插畫風選項圖卡。",
+                note: "情感警世與真相揭發題，轉發與收藏潛力極大，能有效吸引精準核心受眾。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+            },
+            {
+                id: 221, month: "2026-06", week: 3, day: "週日", date: "2026-06-21", time: "23:00", platform: "Threads", type: "深夜療癒文",
+                title: "日更 Day 21 🍃 有些關係不用刻意刪掉，只要不再餵養就好", content: "日更滿三週了！謝謝一直按時陪伴在小跳身邊的妳們。\n\n很多人一受傷，就急著去拉黑、去大吵大鬧、或者去發洩小作文。\n其實，最頂級、最體面的告別，是「無聲的斷養」。\n不用刪除好友、不用退回禮物，只是不再關注他的一絲一毫，不再主動發送任何能量。當他只是躺在通訊錄裡的一個死屍，妳就已經大獲全勝了。✨",
+                cta: "留言一句：『我收回我的能量。』晚安，勇敢的女孩。", task: "深夜23:00純文字發布，文風平靜安詳卻力量感滿滿。",
+                note: "自愛大女主核心觀念植入，引領高頻磁場共振，建立極高粉絲忠誠度。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+            },
+            {
+                id: 222, month: "2026-06", week: 4, day: "週一", date: "2026-06-22", time: "22:40", platform: "Threads", type: "深夜情緒碎片",
+                title: "日更 Day 22 🌸 妳不是想太多，妳傷過真的「有感覺到」", content: "『我是不是太敏感了？』『我是不是想太多了？』\n\n別再因為別人的粗心與冷漠，而回過頭來指責自己的細緻。\n妳的敏感，代表妳能感受到微風的溫度、落葉的起伏，代表妳有一顆無比珍貴且細膩的靈魂。該反省的，是那個糟蹋妳溫柔與細心的粗糙之人。❤️",
+                cta: "留言留下一朵 🌸 送給同樣高敏感的彼此。今晚，放過妳的敏感吧。", task: "Threads 發布，搭配簡單粉色手寫體插畫，營造睡前暖心氣氛。",
+                note: "極高敏感群體共鳴文，高收藏與高互動型深夜小品。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+            },
+            {
+                id: 223, month: "2026-06", week: 4, day: "週二", date: "2026-06-23", time: "20:30", platform: "IG", type: "大眾占卜", isOriginal: true,
+                title: "日更 Day 23 🌺 妳下一波『甜甜桃花』，會以什麼驚喜方式降臨？", content: "感覺自己的生活圈太小、每天兩點一線、快要失去心動的能力了嗎？\n別擔心，六月的尾聲，宇宙正在悄悄為妳重新洗牌社交能量場！✨\n\nA｜相處多年的老朋友，突然在一瞬間擦出曖昧火花（星幣六 -> 聖杯二）\nB｜在全新的學習或職場場合，遇到成熟主動的霸氣對象（權杖皇后）\nC｜意想不到的社交聚會、或者網路平台上收到的有趣私訊（愚人牌）\nD｜前任帶著誠意認錯回頭，或者有驚喜邂逅（審判牌）",
+                cta: "留言選項 + 分享給最想看妳脫單的閨蜜，明天中午看妳的夏日脫單指南！", task: "設計熱烈粉嫩、帶有夏日煙火與桃花背景的塔羅牌卡，視覺青春亮麗。",
+                note: "月底桃花能量題，利用好運關鍵字吸取新粉觸及與轉發流。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+            },
+            {
+                id: 224, month: "2026-06", week: 4, day: "週三", date: "2026-06-24", time: "21:20", platform: "限動", type: "占卜導流",
+                title: "日更 Day 24 📬 當妳的心太吵時，抽牌是最好的安神藥", content: "這兩天后台一對一預約又爆滿了，大多是半夜因為曖昧或分手而哭醒的女生。\n\n其實，心不定、磁場吵雜的時候，抽再多大眾占卜也只是暫時的創可貼。如果妳想得到真正針對妳個人星盤與靈魂契約的深度指引，或許我們該一對一，坐下來，好好抽一組牌，幫妳把心裡的風雨停下來。",
+                cta: "私訊【個人感情占卜】，讓小跳當妳最溫柔的靈魂傾聽者。", task: "限動三頁故事：匿名粉絲私信截圖、溫情解析、最後一頁置入諮詢預約通道。",
+                note: "故事化深度行銷，提高個案轉換，衝刺 10,000 元月收入的重要營運點！", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+            },
+            {
+                id: 225, month: "2026-06", week: 4, day: "週四", date: "2026-06-25", time: "20:10", platform: "Threads", type: "心小跳人森觀察室",
+                title: "日更 Day 25 🗡️ 成熟是學會「面無表情地走開」", content: "以前一受委屈，就恨不得跟全世界解釋、去大吵大鬧、去證明自己是對的。\n\n現在長大才明白，對消耗妳、不珍惜妳、三言兩語就否定妳的人，最好的反擊，從來不是爭辯。而是面無表情地關上大門、徹底拉黑，任憑他在門外怎麼敲，妳也頭也不回地走向更美、更貴的地方。妳的時間很貴，不要浪費給垃圾。🙂",
+                cta: "留言：『我的時間很貴。』時刻提醒自己，開啟冷酷大女主模式！", task: "Threads 發文。字句鏗鏘有力，主打高配得感與清醒思想。",
+                note: "高轉發的女性覺醒金句。鎖定高認知、高價值的潛在客戶群。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+            },
+            {
+                id: 226, month: "2026-06", week: 4, day: "週五", date: "2026-06-26", time: "19:30", platform: "IG", type: "生活感＋占卜軟廣",
+                title: "日更 Day 26 🛋️ 週末夜，把精力百分之百還給自己", content: "（照片：溫馨精緻的咖啡桌、擺放著塔羅牌、旁邊有一束剛買的粉色鬱金香）\n\n『剛幫幾位 VIP 客戶做完流年感情預約整理。走出工作室，去花店給自己買了束鬱金香，心情感覺特別好。宇宙說：妳卡住的那件事，其實六月底前就會有轉機了。好事都在路上，週末，請把能量還給自己！』",
+                cta: "私訊【轉機】看看妳最近的感情與事業突破口在哪裡？", task: "生活實拍圖搭配溫柔的旁白文字與導流引導。",
+                note: "軟性生活化個案預約導入，完全無廣告強迫感，提高私信轉化率。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+            },
+            {
+                id: 227, month: "2026-06", week: 4, day: "週六", date: "2026-06-27", time: "20:40", platform: "IG", type: "高流量占卜", isOriginal: true,
+                title: "日更 Day 27 💔 當妳突然安靜了，他內心真正的心理防線是什麼？", content: "妳是不是也累了、不想再主動迎合了，決定退回安全距離？\n當那個平時天天找他的人，突然一整天、甚至幾天不發一條訊息。\n在他冷漠的外表下，潛意識深處，此時此刻正在發生什麼樣的化學反應？🎴\n\nA｜開始慌張亂想，不停翻看妳的動態與在線狀態（權杖侍從）\nB｜自尊心作祟，強裝不在乎、在賭妳什麼時候會主動低頭（星幣五）\nC｜大徹大悟，終於意識到自己之前的冷漠有多愚蠢，正策劃認錯（審判牌）\nD｜鬆了一口氣，但同時有一種被拋棄的隱隱失落感（聖杯八）",
+                cta: "留言妳的『安靜選項』，明天中午公布他的潛意識真實防線解析！", task: "製作柔和偏暗色調、帶有神秘水晶折射、視覺衝擊力極高的四宮格大眾占卜圖卡。",
+                note: "高毒性、高流量的情感博弈題，直擊曖昧博弈期與斷聯期受眾的心防，收藏與轉發率必然大爆發。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+            },
+            {
+                id: 228, month: "2026-06", week: 4, day: "週日", date: "2026-06-28", time: "23:00", platform: "Threads", type: "月末總結",
+                title: "日更 Day 28 ❄️ 六月的最後一個週末：謝謝那個，沒有妥協的妳", content: "日更挑戰倒數第三天！我們真的快要撐下來了！\n\n回頭看看，這四週的時間，\n不論妳經歷了多難過的失眠、多糟糕的冷暴力、還是工作上的委屈。\n最該感謝的，是那個即便心裡一塌糊塗，明天醒來依然願意打扮得漂漂亮亮、努力生活的自己。妳比妳想像中，還要堅強得多。✨",
+                cta: "留言：『謝謝自己，我做到了！』給一路堅強走過來的自己一個熱烈抱抱！", task: "深夜23:00點純文字發布，文筆溫情催淚，引導粉絲在留言區情感傾訴。",
+                note: "日更尾聲情感大收網，建立無比牢固的粉絲情感防線，為一月的新計畫與付費做深度信任鋪墊。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+            },
+            {
+                id: 229, month: "2026-06", week: 4, day: "週一", date: "2026-06-29", time: "22:15", platform: "Threads", type: "深夜情緒碎片",
+                title: "日更 Day 29 🚀 倒數第二天！有些再見，是為了和更棒的自己重逢", content: "六月的最後一個深夜。\n\n答應小跳，過了今晚，那些連一條訊息都懶得回的人、那些讓妳內耗委屈的爛事，都留在六月的風裡曬乾、扔掉，好嗎？\n明天結束之後，我們一起挺直腰桿、高高興興地跨進七月，去曬最燦爛的桃花，去當最富有、最閃亮的女主！✨",
+                cta: "留言：『明天，我來見證圓滿！』給自己立下完美的六月句點！", task: "Threads 深夜22:15發文。充滿激勵、溫馨與對未來美好期待的文字。",
+                note: "營造挑戰即將成功的史詩感，調動高昂的社群參與感與轉發率。", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+            },
+            {
+                id: 230, month: "2026-06", week: 4, day: "週二", date: "2026-06-30", time: "22:50", platform: "Threads", type: "月末總結", isOriginal: true,
+                title: "日更 Day 30 🏆 挑戰圓滿達成！回頭看，萬物皆是恩賜", content: "今晚，是 2026/06/30，小跳正式完成了【30天日更不中斷挑戰】！🎉\n\n這 30 天裡，我寫下了 30 篇心靈記錄，陪伴了上萬人次的失眠深夜。\n謝謝每天按時守候在心小跳身邊的妳們。妳們的每一個按讚、每一條留言，都是宇宙賜給我最棒的禮物。\n\n恭喜小跳順利達標，也恭喜今晚的妳，完成了這場靈魂的蛻變之旅！✨",
+                cta: "留言一句：『六月辛苦了，七月我只愛自己！』我們留言區舉辦感恩大抽獎！", task: "深夜22:50分發表，字裡行間充滿無比的感恩、誠意與對社群的強烈回饋，可同步截圖發至限動。",
+                note: "30天日更完美收官！引爆社群留言量，強烈穩固核心粉絲圈，迎接七月夏日桃花主題！", status: "排程中", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
 
             // ================= 7 月 (2026-07) =================
@@ -414,25 +602,25 @@
             },
             {
                 id: 308, month: "2026-07", week: 3, day: "週四", date: "2026-07-23", time: "20:30", platform: "IG", type: "高流量占卜",
-                title: "下半年，你有機會遇到命中注定的雙生火焰嗎？", content: "你相信靈魂伴侶嗎？那個一見面就彷彿認識了幾萬年，\n靈魂在微微顫抖、互相吸引的人。✨\n閉上眼，讓你的直覺引領，看看你的靈魂是否即將與他重逢？\n\nA｜是的，命中注定的重逢已在倒數（審判牌）\nB｜再等等，你還需要先學會跟自己好好相處（女教皇）\nC｜其實他已經出現了，飾作妳還不敢相信（星辰牌）\nD｜你們之間有業力尚未完成，需要先療癒自己（命運之輪）",
+                title: "下半年，你有機會遇到命中注定的雙生火焰嗎？", content: "你相信靈魂伴侶嗎？那個一見面就彷彿認識了幾萬年，\n靈魂在微微顫抖、互相吸引的人。✨\n閉上眼，讓你的直覺引領，看看你的靈魂是否即將與他重逢？\n\nA｜是的，命中注定的重逢已在倒數（審判牌）\nB｜再等等，你還需要先學會跟自己好好相處（女教皇）\nC｜其實他已經出現了，只是妳還不敢相信（星辰牌）\nD｜你們之間有業力尚未完成，需要先療癒自己（命運之輪）",
                 cta: "留言你的靈魂代碼【雙生】，明天看詳細解析與雙生特徵！", task: "神祕紫色、雙生靈魂對視的抽象剪影設計，打造高端的神祕學視覺體驗。",
-                note: "導入神祕學『雙生火焰』概念，這也是近年占卜界的爆流量話題。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+                note: "傳導神祕學『雙生火焰』概念，這也是近年占卜界的爆流量話題。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
             {
                 id: 309, month: "2026-07", week: 3, day: "週日", date: "2026-07-26", time: "22:00", platform: "限動", type: "生活感＋占卜軟廣",
-                title: "夏日好天氣，占卜出外景 ☕", content: "（照片：在一張灑滿陽光的戶外咖啡桌上，放著精緻的拿鐵、塔羅牌與粉色水晶）\n\n『今天在戶外幫幾位VIP客戶做感情整合占卜。陽光這麼好，牌卡的能量也特別清澈。宇宙說：妳卡住的那件事，其實七月結束前就會有轉機了。不要急，好事都在路上了。』",
+                title: "夏日好天氣，占卜出外景 ☕", content: "（照片：在一張灑滿陽光的戶外咖啡桌上，放著精緻的拿鐵、塔羅牌與粉色水晶）\n\n『今天在戶外幫幾位VIP客戶做感情整合占卜。陽光這麼好，牌卡的能量也特別清澈。宇宙說：妳卡住的那件事，其實七月結束前就會有轉機了。不要急，好事都在路下了。』",
                 cta: "私訊【陽光】看看你最近的運勢轉機在哪裡？", task: "放真實、有生活質感而非網路下載的照片，拉近「占卜師真實存在」的人設質感。",
                 note: "軟性、生活感置入個人占卜預約，極易提升預約成功率。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
             {
                 id: 310, month: "2026-07", week: 4, day: "週二", date: "2026-07-28", time: "20:00", platform: "Threads", type: "心小跳人森觀察室",
                 title: "千萬別去倒追一個男生", content: "很多小仙女會問：『小跳，我很喜歡他，我該主動去倒追他嗎？』\n\n我的答案只有一個：千萬不要。🙂\n男生的骨子裡天生是獵人。倒追送上門的獵物，他很快就會失去興趣。妳可以散發魅力、可以釋放好感信號、可以當一朵香氣鋪鼻的花，吸引他來採蜜；但絕對不要自己跑去黏在他身上。記住，妳是高貴的女王，不是追著跑的臣子。",
-                cta: "留言：『我是女王。』時刻提醒自己不要戀愛腦！", task: "直接 Threads 發文。文字帶有強烈自主、自愛思想，引發大量女性受眾收藏與轉發。",
+                cta: "留言：『我是女王。』時刻提醒自己不要戀愛腦！", task: "直接 Threads 發文。文字帶有強烈意圖、自愛思想，引發大量女性受眾收藏與轉發。",
                 note: "強化女性自愛人設，極易引發女性認同與轉發潮。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
             {
                 id: 311, month: "2026-07", week: 4, day: "週四", date: "2026-07-30", time: "20:30", platform: "IG", type: "大眾占卜",
-                title: "未來一個月，你的桃花運會如何『逆襲爆棚』？", content: "感覺自己的生活圈太小、每天兩點一線嗎？\n別擔心，七月的尾聲，宇宙正在悄悄重新洗牌你的社交能量！🎴\n\nA｜意想不到的聚會邂逅，開啟甜甜愛戀（聖杯三）\nB｜職場或學習場合，有人正在暗戀你（星幣三）\nC｜網路社交平台，會收到有趣的搭訕（聖杯八）\nD｜前任回頭試探，或跟老朋友擦出火花（審判牌）",
+                title: "未來一個月，你的桃花運會如何『逆襲爆棚』？", content: "感覺自己的生活圈太小、每天兩點一線嗎？\n別擔心，七月的尾聲，宇宙正在悄悄重新洗牌你的社交能量場！🎴\n\nA｜意想不到的聚會邂逅，開啟甜甜愛戀（聖杯三）\nB｜職場或學習場合，有人正在暗戀你（星幣三）\nC｜網路社交平台，會收到有趣的搭訕（聖杯八）\nD｜前任回頭試探，或跟老朋友擦出火花（審判牌）",
                 cta: "留言你的逆襲選項，明天揭曉妳的夏日尾聲逆襲攻略！", task: "設計熱烈、帶有煙火、派對與粉色桃花意象的亮眼插畫風占卜圖，隔天發布解析。",
                 note: "月末桃花總結，利用『桃花爆棚』等關鍵字調動夏日尾聲的流量高峰。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
@@ -446,14 +634,14 @@
             // ================= 8 月 (2026-08) =================
             {
                 id: 401, month: "2026-08", week: 1, day: "週一", date: "2026-08-03", time: "20:00", platform: "Threads", type: "深夜情緒碎片",
-                title: "八月，我們來一場內在麈埃大掃除 🧹", content: "不知不覺到了八月，立秋快來了。\n這個月，心小跳想陪你好好聊聊『自我與靈魂』。\n\n我們花了太多時間在乎別人愛不愛我們、回不回訊息，卻忘了回過頭來問問自己：『我最近，過得開心嗎？』\n這個月，把執念掃出門，給自己的心騰出一個乾淨的位置吧。",
+                title: "八月，我們來一場內在麈埃大掃除 🧹", content: "不知不覺到了八月，立秋快來了。\n這個月，心小跳想陪你好好聊聊『自我與靈魂』。\n\n我們花了太多時間在乎別人愛不愛我們、回不回訊息，卻忘了回過頭來問問自己：『我最近，過得開心嗎？』\n這個月，把執念鋪出門，給自己的心騰出一個乾淨的位置吧。",
                 cta: "留言：『這個月，我只關心我自己。』", task: "清爽、極簡的排版，用治癒人心的文字拉開八月的序幕。",
                 note: "八月主題『靈魂整理與自愛』宣佈，轉換粉絲視野到內在成長。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
             {
                 id: 402, month: "2026-08", week: 1, day: "週三", date: "2026-08-05", time: "20:30", platform: "IG", type: "大眾占卜",
-                title: "此時此刻，宇宙最想對你的靈魂說哪句悄悄話？", content: "生活有時很累，感到迷茫和孤單嗎？\n閉上眼睛，深呼吸三次，隨機抽一張牌，聽聽宇宙母親今晚給你的靈魂慰藉與指引。🕯️\n\nA｜『孩子，慢下來，妳已經做得很棒了。』（女皇牌）\nB｜『勇敢拒絕那些消耗妳的人，這不自私。』（權杖五）\nC｜『懸著的那顆心可以放下了，一切自有最好的安排。』（星辰牌）\nD｜『勇敢轉身吧，前面有更美的風景在等妳。』（聖杯八）",
-                cta: "留言你的心電感應選項，明天中午為你送上溫暖的解讀神諭！", task: "視覺設計走溫暖治癒、微光蠟燭、自然森林與精靈風，隔天更新溫暖詳細的字卡解析。",
+                title: "此時此刻，宇宙最想對你的靈魂說哪句悄悄話？", content: "生活有時很累，感到迷茫和孤單嗎？\n閉上眼睛，深呼吸三次，隨機抽一張牌，聽聽宇宙母親今晚給你的靈魂慰藉與指引.🕯️\n\nA｜『孩子，慢下來，妳已經做得很棒了。』（女皇牌）\nB｜『勇敢拒絕那些消耗妳的人，這不自私。』（權杖五）\nC｜『懸著的那顆心可以放下了，一切自有最好的安排。』（星辰牌）\nD｜『勇敢轉身吧，前面有更美的風景在等妳。』（聖杯八）",
+                cta: "留言你的心電感應選項，明天中午為你送上溫慢的解讀神諭！", task: "視覺設計走溫慢治癒、微光蠟燭、自然森林與精靈風，隔天更新溫慢詳細的字卡解析。",
                 note: "高心靈治癒力占卜，極易引發粉絲私訊傾訴，轉化為深層個案諮詢。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
             {
@@ -630,7 +818,7 @@
             },
             {
                 id: 607, month: "2026-10", week: 3, day: "週一", date: "2026-10-19", time: "22:15", platform: "Threads", type: "深夜情緒碎片",
-                title: "允許所有的失去，都是在給靈魂騰出空間", content: "樹木到了秋天，會冷酷地落葉，因為它要保存能量度過冬天。\n妳也一樣。那些離開妳的人、那些沒能修成正果的曖昧，都不過是落葉。\n別在冬天抱著枯枝哭泣。允許所有失去，那是宇宙在幫妳給真正對的人騰出乾淨的位置。🍂",
+                title: "允許所有的失去，都是在給靈魂騰出空間", content: "樹木到了秋天，會冷酷地落葉，因為它要保存能量度度冬天。\n妳也一樣。那些離開妳的人、那些沒能修成正果的曖昧，都不過是落葉。\n別在冬天抱著枯枝哭泣。允許所有失去，那是宇宙在幫妳給真正對的人騰出乾淨的位置。🍂",
                 cta: "轉發這句，給今晚需要勇氣的自己。", task: "深夜秋日療癒短文，文字畫面感極強，極具收藏價值。",
                 note: "治癒因執念而痛苦的受眾，拉近 IP 與粉絲的情感連結。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
@@ -661,7 +849,7 @@
             {
                 id: 612, month: "2026-10", week: 4, day: "週日", date: "2026-10-31", time: "22:30", platform: "Threads", type: "月末總結",
                 title: "萬聖之夜：今晚，燒掉所有的不甘心", content: "十月的最後一秒。\n謝謝你這個月，跟著心小跳一起完成了這場痛徹心扉的靈魂掃除。\n\n答應我，過了今晚，那些不回訊息的人、那些讓你掉淚的業力關係，就留在萬聖夜的風裡，好嗎？十一月，天會變冷，但心小跳會多陪陪你，給你最溫暖的冬日抱抱。🧸",
-                cta: "留言一句：『謝謝十月，十一月我要暖和度過。』", task: "溫暖催淚的謝幕與告別短文，深夜 22:30 發布。",
+                cta: "留言一句：『謝謝十月，十一月我要暖和度過。』", task: "溫慢催淚的謝幕與告別短文，深夜 22:30 發布。",
                 note: "完美結束萬聖陰影月，建立強烈粉絲歸屬感，迎接初冬陪伴主題。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
 
@@ -674,7 +862,7 @@
             },
             {
                 id: 702, month: "2026-11", week: 1, day: "週三", date: "2026-11-04", time: "20:30", platform: "IG", type: "大眾占卜",
-                title: "今年冬天，妳會跟誰窩在一起喝熱可可？", content: "冷冽的初冬，宇宙有沒有預排一位『暖手寶戀人』給妳？☕\n不管是全新遇見，還是默默守護的人，看看這陣北風會帶誰來？❄️\n\nA｜溫柔細膩、自帶陽光感的文青男孩（聖杯騎士）\nB｜主動熱烈、不藏私的年下弟弟（權杖侍從）\nC｜成熟穩重、能給妳十足安全感的霸總型（星幣國王）\nD｜相處像貓咪般黏人可愛的暖男（聖杯侍從）",
+                title: "今年冬天，妳會跟誰窩在一起喝熱可可？", content: "冷冽的初冬，宇宙有沒有預排一位『暖手寶戀人』給妳？☕\n不管是全新遇見，還是默默守護的人，看看這陣北風會帶誰來？❄️\n\nA｜溫源細膩、自帶陽光感的文青男孩（聖杯騎士）\nB｜主動熱烈、不藏私的年下弟弟（權杖侍從）\nC｜成熟穩重、能給妳十足安全感的霸總型（星幣國王）\nD｜相處像貓咪般黏人可愛的暖男（聖杯侍從）",
                 cta: "留言你的『暖手選項』，明天公布妳的冬日邂逅攻略！", task: "粉紅與雪白雪花結合、溫馨壁爐背景的超美四宮格選項圖卡設計。",
                 note: "暖冬桃花大眾占卜，極易引發單身受眾參與。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
@@ -706,7 +894,7 @@
                 id: 707, month: "2026-11", week: 3, day: "週一", date: "2026-11-16", time: "23:00", platform: "Threads", type: "深夜療癒文",
                 title: "妳已經很努力了，可以靠一下我 🛋️", content: "這一年也快過完了。\n我知道妳每天都在拼命假裝堅強、假裝沒事、假裝自己過得很好。\n\n可是回到家、關上燈的那一刻，一定很累吧？\n在心小跳這裡，妳可以卸下所有的面具，像個小孩子一樣哭泣、抱怨。我會一直在這裡，當妳最溫柔的後盾。晚安，辛苦的妳。🧸",
                 cta: "晚安，今天不準再為難自己囉，抱抱。", task: "溫柔舒緩的文字，配合粉金色毛茸茸貓咪手繪插畫發布。",
-                note: "深夜心靈治癒，為年底高單價一對一流年占卜做情感信任鋪墊。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+                note: "深夜心靈治癒，為年底高單價一一星盤占卜做情感信任鋪墊。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
             {
                 id: 708, month: "2026-11", week: 3, day: "週三", date: "2026-11-18", time: "20:30", platform: "IG", type: "大眾占卜",
@@ -724,11 +912,11 @@
                 id: 710, month: "2026-11", week: 4, day: "週二", date: "2026-11-24", time: "20:00", platform: "Threads", type: "占卜導流",
                 title: "為什麼要提前做『2027流年占卜』？", content: "這幾天一打開預約，滿滿都是來卡位年底流年諮詢的個案。\n\n其實流年就像是天氣預報。提前知道什麼時候會下雨，妳就能提前準備好傘、穿好防水靴，而不是等暴風雨來了被淋得全身濕透、手忙腳亂。提前規劃妳的 2027，妳才能精準踩點、少走彎路、牢牢抓住事業與感情的黃金逆襲期！💰",
                 cta: "私訊【2027流年】預約限量 10 名早鳥保留名額，過期不補！", task: "乾淨清爽、專業且極具說服力的行銷導流短文發布。",
-                note: "流年早鳥第一波大導流，營造年底名額稀缺與緊迫感。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
+                note: "流年早鳥第一波大導流，營營年底名額稀缺與緊迫感。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
             {
                 id: 711, month: "2026-11", week: 4, day: "週四", date: "2026-11-26", time: "21:30", platform: "Threads", type: "奶茶式戀愛翻譯",
-                title: "冷暴力，是大人最卑鄙的告別方式", content: "不回訊息、對妳忽冷忽熱、找各種忙碌的藉口躲著妳。\n\n親愛的，別傻傻地等他開口說分手了。\n冷暴力，其實就是最卑鄙、最懦弱的男人，想把『說分手的罪名與痛苦』轉嫁到妳身上，逼妳自己受不了而主動離開。當他開始冷落妳的那一刻起，他的答案就已經寫在對話框裡了。🙂",
+                title: "冷暴力，是大人最卑鄙的告別方式", content: "不回訊息、對妳忽冷忽熱、找各種忙碌的藉口躲著妳。\n\n親愛的，別傻傻地等他開口說分手了。\n冷暴力，其實就是最卑鄙、最懦弱的男人，想把『說分手的罪名與痛苦』轉嫁到妳身上，逼妳自己受不了而主動離開。當他開始冷落妳的那一刻起， his答案就已經寫在對話框裡了。🙂",
                 cta: "點擊收藏，當妳又想犯傻犯賤時，拿出來看一遍！", task: "字句犀利、極易打動卡在冷暴力關係中受眾的清醒文章。",
                 note: "月末毒舌文，篩選出真正有療癒與釋放執念需求的高轉化用戶。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
@@ -772,7 +960,7 @@
             },
             {
                 id: 806, month: "2026-12", week: 2, day: "週六", date: "2026-12-12", time: "20:30", platform: "IG", type: "高流量占卜",
-                title: "未來半年，妳的靈魂密碼會解鎖什麼驚人奇蹟？", content: "整理完 2026 的內在創傷，妳的靈魂密碼即將重置！\n在即將到來的 2027 上半年，命運會送上什麼樣的奇蹟禮物？🔮\n\nA｜甩開舊人，迎來真愛（戀人牌）\nB｜才華變現，財源滾滾（星幣十）\nC｜貴人提攜，跨界成功（戰車牌）\nD｜心想事成，內心豐盛（太陽牌）",
+                title: "未來半年，妳的靈魂密碼會解鎖什麼驚人奇蹟？", content: "解讀完 2026 的內在創傷，妳的靈魂密碼即將重置！\n在即將到來的 2027 上半年，命運會送上什麼樣的奇蹟禮物？🔮\n\nA｜甩開舊人，迎來真愛（戀人牌）\nB｜才華變現，財源滾滾（星幣十）\nC｜貴人提攜，跨界成功（戰車牌）\nD｜心想事成，內心豐盛（太陽牌）",
                 cta: "留言：『奇蹟』，接通明年最強顯化通道！", task: "設計精美古典、帶有星宿魔法陣與古銅金色鑰匙的絕美塔羅牌面，隔天發布深度解析卡。",
                 note: "針對搞錢與自我提升女孩，互動率與點讚率預期大爆發。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
@@ -802,7 +990,7 @@
             },
             {
                 id: 811, month: "2026-12", week: 4, day: "週四", date: "2026-12-24", time: "20:30", platform: "Threads", type: "奶茶式戀愛翻譯",
-                title: "聖誕夜的清醒針：不回訊息的人就是死了", content: "今天是聖誕夜。\n妳是不是還在眼巴巴看著螢幕、想著他會不會給妳發一條『聖誕快樂』？\n\n親愛的，別傻了。在這個人人都捧著手機的時代，他如果沒給妳發訊息，唯一的翻譯就是：他不關心妳，或者此時此刻他正忙著陪別人。不要再給他找藉口了。今晚，出門去跟朋友吃火鍋、打扮漂亮，把那具死屍拉黑吧。🙂",
+                title: "聖誕夜的清醒針：不回訊息的人就是死了", content: "今天是聖誕夜。\n妳是不是還在眼巴巴看著螢幕、想著他會不會給妳發一條『聖誕快樂』？\n\n親愛的，別傻了。在這個人人人手一機的時代，他如果沒給妳發訊息，唯一的翻譯就是：他不關心妳，或者此時此刻他正忙著陪別人。不要再給他找藉口了。今晚，出門去跟朋友吃火鍋、打扮漂亮，把那具死屍拉黑吧。🙂",
                 cta: "留言：『今晚，我只跟自己快樂！』按讚拉黑死屍！", task: "犀利辛辣、大女主清醒大作，聖誕夜深夜發送，熱度破表。",
                 note: "情感警世文，擊中聖誕夜失落或卡在曖昧中的粉絲，製造極高轉發與收藏。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
@@ -822,7 +1010,7 @@
             },
             {
                 id: 902, month: "2027-01", week: 1, day: "週日", date: "2027-01-03", time: "20:30", platform: "IG", type: "大眾占卜",
-                title: "一月份，妳即將迎來什麼爆發式的『開門紅』？", content: "新年第一個月，宇宙已經為妳備妥了什麼樣的翻身驚喜？✨\n閉上眼，深呼吸，隨機抽一張新年奇蹟牌吧！🔮\n\nA｜天降桃花與甜美愛情（聖杯二）\nB｜事業開掛，財運大進帳（星幣太陽）\nC｜擺脫內耗，內心大解脫（愚人牌）\nD｜才華變現，貴人大力相助（權杖皇后）",
+                title: "一月份，妳即將迎來什麼爆發式的『開門紅』？", content: "新年第一個月，宇宙已經為妳備妥了什麼樣的翻身驚喜？✨\n閉上眼，深呼吸，隨機抽一張新年奇蹟牌吧！🔮\n\nA｜天降桃花與甜美愛情（聖杯二）\nB｜事業開掛，財運大進帳（星幣太陽）\nC｜擺脫內耗，內心大解脫（愚人牌）\nD｜才華變現，貴人大立相助（權杖皇后）",
                 cta: "留言妳的開門紅代碼，明日中午留言區更新超詳細開運指南卡！", task: "設計熱烈、帶有金色光輝、煙火與粉色交織的亮眼插畫風占卜圖，隔天發布解析。",
                 note: "新年好運勢占卜，高流量，能大幅提振一月熱度。", status: "草稿", likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             },
@@ -888,15 +1076,16 @@
             }
         ];
 
-        // 平台的選項、類型、貼文狀態
         const platforms = ["IG", "Threads", "限動", "Reels"];
         const types = ["大眾占卜", "高流量占卜", "深夜情緒碎片", "心小跳人森觀察室", "奶茶式戀愛翻譯", "生活感互動", "深夜療癒文", "占卜導流", "生活感＋占卜軟廣", "月末總結"];
         const statuses = ["草稿", "製作中", "排程中", "已發布", "待解析"];
 
-        // 初始化資料庫 (若 LocalStorage 內有先前儲存的資料則抓取，否則直接載入 108 篇精美排程)
         let posts = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null") || preplannedPosts;
-        let selectedMonth = localStorage.getItem(STORAGE_KEY + "_selMonth") || posts[0]?.month || "2026-05";
+        let selectedMonth = localStorage.getItem(STORAGE_KEY + "_selMonth") || posts[0]?.month || "2026-06"; 
         let selectedWeek = localStorage.getItem(STORAGE_KEY + "_selWeek") || "all";
+
+        let challengeFollowers = Number(localStorage.getItem(STORAGE_KEY + "_challFollowers") || "15");
+        let challengeRevenue = Number(localStorage.getItem(STORAGE_KEY + "_challRevenue") || "1200");
 
         let pendingConfirmAction = null;
         let pendingPromptAction = null;
@@ -957,7 +1146,6 @@
             pendingPromptAction = null;
         }
 
-        // 綁定自訂 Modal 上的確認/取消按鈕
         document.getElementById("confirmCancelBtn").addEventListener("click", closeConfirm);
         document.getElementById("confirmOkBtn").addEventListener("click", () => {
             if (pendingConfirmAction) pendingConfirmAction();
@@ -971,11 +1159,12 @@
             closePrompt();
         });
 
-        // 儲存狀態至本地
         function save() {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
             localStorage.setItem(STORAGE_KEY + "_selMonth", selectedMonth);
             localStorage.setItem(STORAGE_KEY + "_selWeek", selectedWeek);
+            localStorage.setItem(STORAGE_KEY + "_challFollowers", challengeFollowers);
+            localStorage.setItem(STORAGE_KEY + "_challRevenue", challengeRevenue);
         }
 
         function esc(s) {
@@ -988,31 +1177,51 @@
             return arr.map(x => `<option ${String(x) === String(val) ? "selected" : ""}>${x}</option>`).join("");
         }
 
+        function updateChallengeStats() {
+            const folInput = document.getElementById("challengeFollowers");
+            const revInput = document.getElementById("challengeRevenue");
+            if (folInput) challengeFollowers = Number(folInput.value || 0);
+            if (revInput) challengeRevenue = Number(revInput.value || 0);
+
+            localStorage.setItem(STORAGE_KEY + "_challFollowers", challengeFollowers);
+            localStorage.setItem(STORAGE_KEY + "_challRevenue", challengeRevenue);
+
+            const junePosts = posts.filter(p => p.month === "2026-06");
+            const completedDays = junePosts.filter(p => p.status === "已發布").length;
+            const daysPercent = Math.min(100, Math.round((completedDays / 30) * 100));
+
+            const folPercent = Math.min(100, Math.round((challengeFollowers / 100) * 100));
+            const revPercent = Math.min(100, Math.round((challengeRevenue / 10000) * 100));
+
+            document.getElementById("challengeDaysText").innerText = `${completedDays} / 30 天 (${daysPercent}%)`;
+            document.getElementById("challengeDaysBar").style.width = `${daysPercent}%`;
+
+            document.getElementById("challengeFollowersText").innerText = `${challengeFollowers} / 100 粉 (${folPercent}%)`;
+            document.getElementById("challengeFollowersBar").style.width = `${folPercent}%`;
+
+            document.getElementById("challengeRevenueText").innerText = `${challengeRevenue.toLocaleString()} / 10,000 元 (${revPercent}%)`;
+            document.getElementById("challengeRevenueBar").style.width = `${revPercent}%`;
+        }
+
         function renderCalendarGrid() {
             const grid = document.getElementById("calendarDaysGrid");
-            grid.innerHTML = ""; // 清空
+            grid.innerHTML = ""; 
 
-            // 解析選中的月份 YYYY-MM
             const parts = selectedMonth.split("-");
             const year = parseInt(parts[0]);
-            const month = parseInt(parts[1]) - 1; // JS 月份由 0 起算
+            const month = parseInt(parts[1]) - 1; 
 
-            // 計算第一天是星期幾、以及當月有幾天
             const firstDayIndex = new Date(year, month, 1).getDay();
             const totalDays = new Date(year, month + 1, 0).getDate();
 
-            // 抓出當前月份所有的貼文
             const monthPosts = posts.filter(p => p.month === selectedMonth);
 
-            // 繪製前補白（上個月留白）
             for (let i = 0; i < firstDayIndex; i++) {
                 grid.innerHTML += `<div class="bg-gray-50/20 rounded-xl h-24 border border-gray-100/10"></div>`;
             }
 
-            // 繪製每一天
             for (let day = 1; day <= totalDays; day++) {
                 const dayStr = `${selectedMonth}-${String(day).padStart(2, "0")}`;
-                // 找出該日期有沒有排程好的貼文
                 const daysPosts = monthPosts.filter(p => p.date === dayStr);
 
                 let badgeHtml = "";
@@ -1022,12 +1231,12 @@
                     if (p.platform === "限動") pfColor = "bg-amber-100 text-amber-700 hover:bg-amber-200";
                     if (p.platform === "Reels") pfColor = "bg-purple-100 text-purple-700 hover:bg-purple-200";
                     
-                    badgeHtml += `<div onclick="scrollToPost(${p.id}, event)" class="text-[9px] ${pfColor} font-black rounded px-1.5 py-1 truncate max-w-full my-1 cursor-pointer transition transform hover:scale-105 shadow-sm" title="點擊跳轉至：${esc(p.title)}">
-                        📌 ${esc(p.time)} [${esc(p.platform)}] ${esc(p.title)}
+                    const starTag = p.isOriginal ? "⭐ " : "";
+                    badgeHtml += `<div onclick="scrollToPost(${p.id}, event)" class="text-[9px] ${pfColor} font-black rounded px-1.5 py-1 truncate max-w-full my-1 cursor-pointer transition transform hover:scale-105 shadow-sm" title="${starTag}點擊跳轉至：${esc(p.title)}">
+                        📌 ${starTag}${esc(p.time)} [${esc(p.platform)}] ${esc(p.title)}
                     </div>`;
                 });
 
-                // 組合日期卡片
                 grid.innerHTML += `
                     <div onclick="addPostAtDate('${dayStr}')" class="bg-white/80 border border-pink-100/40 rounded-xl p-1.5 h-24 hover:border-pink-400 hover:shadow-inner cursor-pointer transition flex flex-col justify-between items-start text-left overflow-hidden">
                         <span class="text-xs font-black text-gray-400">${day}</span>
@@ -1040,36 +1249,34 @@
         }
 
         function render() {
-            // 更新月份選單
             const months = [...new Set(posts.map(p => p.month))].sort();
             const mf = document.getElementById("monthFilter");
             mf.innerHTML = months.map(m => `<option ${m === selectedMonth ? "selected" : ""}>${m}</option>`).join("");
             document.getElementById("weekFilter").value = selectedWeek;
 
-            // 更新月份主題與目標
             const info = monthThemes[selectedMonth] || { title: "自訂內容主題月", goal: "穩定維持排程發文、發布優質心靈塔羅內容並收集首波觸及數據。" };
             document.getElementById("monthTitle").innerText = info.title;
             document.getElementById("monthGoal").innerText = info.goal;
 
-            // 篩選與排序貼文卡片
             const filtered = posts.filter(p => p.month === selectedMonth)
                                   .filter(p => selectedWeek === "all" || String(p.week) === selectedWeek)
                                   .sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time));
 
-            // 加總總覽數據
             ["likes", "comments", "saves", "shares", "dms"].forEach(k => {
                 document.getElementById(k).innerText = filtered.reduce((a, p) => a + Number(p[k] || 0), 0).toLocaleString();
             });
 
-            // 繪製卡片
             document.getElementById("postList").innerHTML = filtered.map(card).join("");
 
-            // 同步繪製視覺化月曆網格
             renderCalendarGrid();
+            updateChallengeStats();
         }
 
-        // 貼文卡片 HTML 模板
         function card(p) {
+            const originalBadge = p.isOriginal ? `
+                <span class="bg-gradient-to-r from-pink-500 to-purple-500 text-white text-[10px] font-black px-2.5 py-0.5 rounded-full shadow-sm ml-2">✨ 核心企劃</span>
+            ` : "";
+
             return `
             <article id="post-card-${p.id}" class="bg-white/90 border border-pink-100/70 rounded-[28px] overflow-hidden shadow-sm hover:shadow-md transition duration-300 flex flex-col justify-between transition-all duration-300">
                 <!-- 卡片頂部資訊 -->
@@ -1083,6 +1290,7 @@
                         <select onchange="update(${p.id},'week',this.value)" class="border border-pink-200 rounded-xl px-1.5 py-1 text-xs bg-white font-black cursor-pointer text-[#ec4899]">
                             ${options(["1","2","3","4"], p.week)}
                         </select>
+                        ${originalBadge}
                     </div>
                     <input class="font-black text-lg w-full bg-transparent border-0 border-b border-transparent hover:border-pink-200/50 focus:border-[#ec4899] focus:bg-white focus:ring-0 focus:outline-none rounded-xl px-1 py-0.5 text-[#2a1621] transition" value="${esc(p.title)}" onchange="update(${p.id},'title',this.value)" placeholder="輸入貼文主題...">
                     
@@ -1149,13 +1357,12 @@
 
         function scrollToPost(id, event) {
             if (event) {
-                event.stopPropagation(); // 阻止事件向上冒泡，避免觸發底層新增貼文
+                event.stopPropagation(); 
             }
             
             const p = posts.find(x => x.id === id);
             if (!p) return;
 
-            // 如果目前篩選了特定的週次，而該貼文不在該週，自動解鎖設回「全部」
             if (selectedWeek !== "all" && String(p.week) !== String(selectedWeek)) {
                 selectedWeek = "all";
                 document.getElementById("weekFilter").value = "all";
@@ -1163,16 +1370,12 @@
                 render();
             }
 
-            // 尋找貼文卡片的 DOM
             const targetCard = document.getElementById(`post-card-${id}`);
             if (targetCard) {
-                // 絲滑滾動置中
                 targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 
-                // 注入櫻粉呼吸脈衝動畫
                 targetCard.classList.add("highlight-card");
                 
-                // 動態結束後移除 class 避免重複疊加
                 setTimeout(() => {
                     targetCard.classList.remove("highlight-card");
                 }, 1800);
@@ -1203,7 +1406,6 @@
             const p = posts.find(x => x.id === id);
             const textToCopy = `${p.content}\n\n${p.cta}`;
             
-            // 利用高相容性臨時文字區域複製
             const textarea = document.createElement("textarea");
             textarea.value = textToCopy;
             textarea.style.position = "fixed";
@@ -1218,7 +1420,6 @@
             document.body.removeChild(textarea);
         }
 
-        // 新增貼文
         function addPost() {
             const nextId = Date.now();
             posts.unshift({
@@ -1243,10 +1444,8 @@
             showToast("成功建立新貼文卡片！", "🔮");
         }
 
-        // 點選月曆格子的快速新增貼文
         function addPostAtDate(dateStr) {
             const nextId = Date.now();
-            // 計算這是第幾週
             const dayNum = parseInt(dateStr.split("-")[2]);
             const weekNum = Math.min(4, Math.ceil(dayNum / 7));
 
@@ -1259,11 +1458,11 @@
                 time: "20:00",
                 platform: "IG",
                 type: "大眾占卜",
-                title: "新貼文主題",
+                title: "自訂新主題",
                 content: "在這裡填完整文案",
                 cta: "留言你的選項。",
                 task: "製作素材並排程。",
-                note: "自訂新增。",
+                note: "於網格快速新增。",
                 status: "草稿",
                 likes: 0, comments: 0, saves: 0, shares: 0, dms: 0
             });
@@ -1272,19 +1471,19 @@
             showToast(`已成功在 ${dateStr} 新增一篇排程！`, "📅");
         }
 
-        // 還原為預排好的 108 篇完美範本
         function resetToPreplanned() {
-            showConfirm("確定要還原排程資料嗎？", "這將會把資料覆蓋回預設預排好的 108 篇（2026/05~2027/01）經典文案範本，您目前的修改將被清除。", () => {
+            showConfirm("確定要還原排程資料嗎？", "這將會把資料覆蓋回預設預排好的 126 篇（含 6 月 30 天日更不中斷企劃）經典文案範本，您目前的修改將被清除。", () => {
                 posts = JSON.parse(JSON.stringify(preplannedPosts));
-                selectedMonth = "2026-05";
+                selectedMonth = "2026-06"; 
                 selectedWeek = "all";
+                challengeFollowers = 15;
+                challengeRevenue = 1200;
                 save();
                 render();
-                showToast("資料已回復為 108 篇跨年度經典預排狀態 🌸", "💫");
+                showToast("資料已回復為 126 篇跨年度經典預排狀態 🌸", "💫");
             });
         }
 
-        // 新增月份動作
         function triggerNewMonth() {
             showPrompt("📅 產生自訂月份", "請輸入您想建立的月份（格式例如：2027-02）", "2027-02", (m) => {
                 if (!m) return;
@@ -1294,7 +1493,6 @@
                     return;
                 }
                 
-                // 複製 5 月份結構作為新月份的草稿底稿
                 const base = preplannedPosts.filter(p => p.month === "2026-05").map((p, i) => ({
                     ...p,
                     id: Date.now() + i,
@@ -1313,7 +1511,6 @@
             });
         }
 
-        // 匯出功能
         function exportData() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(posts, null, 2));
             const downloadAnchor = document.createElement('a');
@@ -1325,7 +1522,6 @@
             showToast("成功匯出排程 JSON 檔！", "📂");
         }
 
-        // 監聽頂部主篩選器
         document.getElementById("monthFilter").addEventListener("change", e => {
             selectedMonth = e.target.value;
             save();
@@ -1338,7 +1534,9 @@
             render();
         });
 
-        // 初始化
+        document.getElementById("challengeFollowers").value = challengeFollowers;
+        document.getElementById("challengeRevenue").value = challengeRevenue;
+
         render();
     </script>
 </body>
